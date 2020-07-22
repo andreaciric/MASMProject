@@ -1,16 +1,19 @@
+INCLUDE Irvine32.inc
+
 .386
 .model flat, stdcall
 .stack 4096
-ExitProcess proto, dwExitCode:dword
+ExitProcess PROTO, dwExitCode:DWORD
+
+.const
 
 .data
-     ; variables are here
+
+.data?
 
 .code
-     main proc
-          ; code is here
-         
-          invoke ExitProcess, 0
-     main endp
+     main PROC
 
-end main
+          exit
+     main ENDP
+END main
