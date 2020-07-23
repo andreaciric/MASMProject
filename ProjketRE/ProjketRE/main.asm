@@ -23,6 +23,7 @@ ExitProcess PROTO, dwExitCode:DWORD
 .code
      main PROC
 
+
           exit
      main ENDP
 END main
