@@ -14,10 +14,6 @@ ExitProcess PROTO, dwExitCode:DWORD
 
 
 
-
-
-
-
 .data?
 
 .code
