@@ -9,6 +9,15 @@ ExitProcess PROTO, dwExitCode:DWORD
 
 .data
 
+
+
+
+
+
+
+
+
+
 .data?
 
 .code
