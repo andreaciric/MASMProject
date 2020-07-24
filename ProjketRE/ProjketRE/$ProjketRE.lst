@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/22/20 17:31:21
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/24/20 22:40:25
 main.asm						     Page 1 - 1
 
 
@@ -28,18 +28,117 @@ main.asm(4) : warning A4011:multiple .MODEL directives found : .MODEL ignored
 				ExitProcess PROTO, dwExitCode:DWORD
 
  00000000			.const
+ = 00000004			     n = 4     ; //broj elemenata niza  
 
  00000000			.data
 
+				     ;// konstante za proveru unosa 
+ 00000000 00000000		     red_num dword 0
+ 00000004 00000000		     blue_num dword 0
+ 00000008 00000000		     green_num dword 0
+ 0000000C 00000000		     yellow_num dword 0
+
+ 00000010 00			     assign_array_indicator BYTE 0      ;//indikatored pocetnog niza
+
  00000000			.data?
+
+ 00000000  00000004 [		     arrayGame dword n dup(?)
+	    00000000
+	   ]
+ 00000010  00000004 [		     arraySetup dword n dup(?)
+	    00000000
+	   ]
 
  00000000			.code
  00000000			     main PROC
 
-				          exit
- 00000007			     main ENDP
+
+ 00000000			     variable_reset:     ;//reset igre 
+ 00000000  C7 05 00000000 R	          mov red_num, 0
+	   00000000
+ 0000000A  C7 05 00000004 R	          mov blue_num, 0
+	   00000000
+ 00000014  C7 05 00000008 R	          mov green_num, 0
+	   00000000
+ 0000001E  C7 05 0000000C R	          mov yellow_num, 0
+	   00000000
+
+ 00000028  B9 00000004		          mov ecx, n
+ 0000002D  BE 00000000		          mov esi, 0
+
+ 00000032			     assign:;// Generisanje random niza
+ 00000032  B8 00000004		          mov eax, n
+ 00000037  E8 00000000 E	          call RandomRange
+ 0000003C  83 C0 01		          add eax, 1
+
+ 0000003F  3B 05 00000000 R	          CMP eax, red_num
+ 00000045  74 EB		          JE assign
+ 00000047  3B 05 00000004 R	          CMP eax, blue_num
+ 0000004D  74 E3		          JE assign
+ 0000004F  3B 05 00000008 R	          CMP eax, green_num
+ 00000055  74 DB		          JE assign
+ 00000057  3B 05 0000000C R	          CMP eax, yellow_num
+ 0000005D  74 D3		          JE assign
+
+ 0000005F  83 FE 00		          CMP esi, 0
+ 00000062  74 14		          JE assign_first
+ 00000064  83 FE 01		          CMP esi, 1
+ 00000067  74 16		          JE assign_second
+ 00000069  83 FE 02		          CMP esi, 2
+ 0000006C  74 18		          JE assign_third
+ 0000006E  83 FE 03		          CMP esi, 3
+ 00000071  74 1A		          JE assign_fourth
+ 00000073  83 FE 04		          CMP esi, 4
+ 00000076  74 1C		          JE assign_end
+
+
+				          ;// Dodela vrednosti konstantama
+
+ 00000078			     assign_first:
+ 00000078  A3 00000000 R	          mov red_num, eax
+ 0000007D  EB 21		          jmp assign_array
+
+ 0000007F			     assign_second :
+ 0000007F  A3 00000004 R	          mov blue_num, eax
+ 00000084  EB 1A		          jmp assign_array
+
+ 00000086			     assign_third :
+ 00000086  A3 00000008 R	          mov green_num, eax
+ 0000008B  EB 13		          jmp assign_array
+
+ 0000008D			     assign_fourth :
+ 0000008D  A3 0000000C R	          mov yellow_num, eax
+ 00000092  EB 0C		          jmp assign_array
+
+
+ 00000094			     assign_end :
+ 00000094  B9 00000004		          mov ecx, n
+ 00000099  BE 00000000		          mov esi, 0
+
+ 0000009E  EB 22		          jmp create_box1
+
+
+ 000000A0			     assign_array : ;// Upisivanje vrednosti u niz
+
+ 000000A0  89 04 B5		          mov arrayGame[esi * 4], eax
+	   00000000 R
+				          .if assign_array_indicator == 0;// Proverava da li je u pitanju test primer
+ 000000B0  89 04 B5		          mov arraySetup[esi * 4], eax
+	   00000010 R
+				          .endif
+ 000000B7  46			          inc esi
+
+				          ; //loop assign
+ 000000B8  49			          dec ecx
+ 000000B9  83 F9 00		          cmp ecx, 0
+ 000000BC  0F 85 FFFFFF70	          jnz assign
+
+
+ 000000C2			     create_box1:
+
+ 000000C2			     main ENDP
 				END main
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/22/20 17:31:21
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/24/20 22:40:25
 main.asm						     Symbols 2 - 1
 
 
@@ -134,9 +233,9 @@ Segments and Groups:
 CONST  . . . . . . . . . . . . .	32 Bit	 00000000 Para	  Public  'CONST'	 ReadOnly
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_BSS . . . . . . . . . . . . . .	32 Bit	 00000000 Para	  Public  'BSS'  
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000000 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000007 Para	  Public  'CODE'	
+_BSS . . . . . . . . . . . . . .	32 Bit	 00000020 Para	  Public  'BSS'  
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000011 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000C2 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -243,7 +342,16 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000007 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000C2 Public STDCALL
+  variable_reset . . . . . . . .	L Near	 00000000 _TEXT	
+  assign . . . . . . . . . . . .	L Near	 00000032 _TEXT	
+  assign_first . . . . . . . . .	L Near	 00000078 _TEXT	
+  assign_second  . . . . . . . .	L Near	 0000007F _TEXT	
+  assign_third . . . . . . . . .	L Near	 00000086 _TEXT	
+  assign_fourth  . . . . . . . .	L Near	 0000008D _TEXT	
+  assign_end . . . . . . . . . .	L Near	 00000094 _TEXT	
+  assign_array . . . . . . . . .	L Near	 000000A0 _TEXT	
+  create_box1  . . . . . . . . .	L Near	 000000C2 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -462,12 +570,17 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
+arrayGame  . . . . . . . . . . .	DWord	 00000000 _BSS	
+arraySetup . . . . . . . . . . .	DWord	 00000010 _BSS	
+assign_array_indicator . . . . .	Byte	 00000010 _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
+blue_num . . . . . . . . . . . .	DWord	 00000004 _DATA	
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
+green_num  . . . . . . . . . . .	DWord	 00000008 _DATA	
 green  . . . . . . . . . . . . .	Number	 00000002h   
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
@@ -476,9 +589,12 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
+n  . . . . . . . . . . . . . . .	Number	 00000004h   
+red_num  . . . . . . . . . . . .	DWord	 00000000 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
+yellow_num . . . . . . . . . . .	DWord	 0000000C _DATA	
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
 
 	   1 Warnings
