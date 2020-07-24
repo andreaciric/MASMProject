@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/24/20 22:40:25
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/24/20 22:56:52
 main.asm						     Page 1 - 1
 
 
@@ -32,28 +32,27 @@ main.asm(4) : warning A4011:multiple .MODEL directives found : .MODEL ignored
 
  00000000			.data
 
-				     ;// konstante za proveru unosa 
+				     ; //promenljive za dodelu brojeva bojama
  00000000 00000000		     red_num dword 0
  00000004 00000000		     blue_num dword 0
  00000008 00000000		     green_num dword 0
  0000000C 00000000		     yellow_num dword 0
 
- 00000010 00			     assign_array_indicator BYTE 0      ;//indikatored pocetnog niza
+ 00000010 00			     assign_array_indicator BYTE 0      ;//indikator pocetnog niza
 
  00000000			.data?
 
- 00000000  00000004 [		     arrayGame dword n dup(?)
+ 00000000  00000004 [		     arrayGame dword n dup(? )          ;//niz brojeva dodeljivanih u toku igre za random redosled kvadrata
 	    00000000
 	   ]
- 00000010  00000004 [		     arraySetup dword n dup(?)
+ 00000010  00000004 [		     arraySetup dword n dup(?)          ;//inicijalna dodela brojeva bojama
 	    00000000
 	   ]
 
  00000000			.code
  00000000			     main PROC
 
-
- 00000000			     variable_reset:     ;//reset igre 
+ 00000000			     variable_reset:     ;//reset igre
  00000000  C7 05 00000000 R	          mov red_num, 0
 	   00000000
  0000000A  C7 05 00000004 R	          mov blue_num, 0
@@ -66,7 +65,7 @@ main.asm(4) : warning A4011:multiple .MODEL directives found : .MODEL ignored
  00000028  B9 00000004		          mov ecx, n
  0000002D  BE 00000000		          mov esi, 0
 
- 00000032			     assign:;// Generisanje random niza
+ 00000032			     assign:             ;//generisanje random niza
  00000032  B8 00000004		          mov eax, n
  00000037  E8 00000000 E	          call RandomRange
  0000003C  83 C0 01		          add eax, 1
@@ -118,11 +117,11 @@ main.asm(4) : warning A4011:multiple .MODEL directives found : .MODEL ignored
  0000009E  EB 22		          jmp create_box1
 
 
- 000000A0			     assign_array : ;// Upisivanje vrednosti u niz
+ 000000A0			     assign_array:       ;// Upisivanje vrednosti u niz
 
  000000A0  89 04 B5		          mov arrayGame[esi * 4], eax
 	   00000000 R
-				          .if assign_array_indicator == 0;// Proverava da li je u pitanju test primer
+				          .if assign_array_indicator == 0         ;// Proverava da li je u pitanju pocetna dodela vrednosti
  000000B0  89 04 B5		          mov arraySetup[esi * 4], eax
 	   00000010 R
 				          .endif
@@ -138,7 +137,7 @@ main.asm(4) : warning A4011:multiple .MODEL directives found : .MODEL ignored
 
  000000C2			     main ENDP
 				END main
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/24/20 22:40:25
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/24/20 22:56:52
 main.asm						     Symbols 2 - 1
 
 

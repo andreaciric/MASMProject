@@ -10,24 +10,23 @@ ExitProcess PROTO, dwExitCode:DWORD
 
 .data
 
-     ;// konstante za proveru unosa 
+     ; //promenljive za dodelu brojeva bojama
      red_num dword 0
      blue_num dword 0
      green_num dword 0
      yellow_num dword 0
 
-     assign_array_indicator BYTE 0      ;//indikatored pocetnog niza
+     assign_array_indicator BYTE 0      ;//indikator pocetnog niza
 
 .data?
 
-     arrayGame dword n dup(?)
-     arraySetup dword n dup(?)
+     arrayGame dword n dup(? )          ;//niz brojeva dodeljivanih u toku igre za random redosled kvadrata
+     arraySetup dword n dup(?)          ;//inicijalna dodela brojeva bojama
 
 .code
      main PROC
 
-
-     variable_reset:     ;//reset igre 
+     variable_reset:     ;//reset igre
           mov red_num, 0
           mov blue_num, 0
           mov green_num, 0
@@ -36,7 +35,7 @@ ExitProcess PROTO, dwExitCode:DWORD
           mov ecx, n
           mov esi, 0
 
-     assign:;// Generisanje random niza
+     assign:             ;//generisanje random niza
           mov eax, n
           call RandomRange
           add eax, 1
@@ -88,10 +87,10 @@ ExitProcess PROTO, dwExitCode:DWORD
           jmp create_box1
 
 
-     assign_array : ;// Upisivanje vrednosti u niz
+     assign_array:       ;// Upisivanje vrednosti u niz
 
           mov arrayGame[esi * 4], eax
-          .if assign_array_indicator == 0;// Proverava da li je u pitanju test primer
+          .if assign_array_indicator == 0         ;// Proverava da li je u pitanju pocetna dodela vrednosti
           mov arraySetup[esi * 4], eax
           .endif
           inc esi
