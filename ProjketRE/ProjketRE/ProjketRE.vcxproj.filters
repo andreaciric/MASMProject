@@ -18,5 +18,13 @@
     <MASM Include="main.asm">
       <Filter>Source Files</Filter>
     </MASM>
+    <MASM Include="random_array.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="procedure.inc">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

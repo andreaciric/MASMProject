@@ -134,6 +134,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <MASM Include="main.asm" />
+    <MASM Include="random_array.asm" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="procedure.inc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
