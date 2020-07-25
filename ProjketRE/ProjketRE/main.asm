@@ -23,16 +23,5 @@ ExitProcess PROTO, dwExitCode:DWORD
                INVOKE random_array, OFFSET ArrayGame, OFFSET ArraySetup, assign_array_indicator
                INVOKE ExitProcess, 0
 
-
-
-          ;//   assign_array:;// Upisivanje vrednosti u niz
-
-     ;// mov arrayGame[esi * 4], eax
-     ;//  .if assign_array_indicator == 0;// Proverava da li je u pitanju pocetna dodela vrednosti
-     ;//  mov arraySetup[esi * 4], eax
-     ;//.endif
-     ;//  inc esi
-
-
      main ENDP
 END main

@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/25/20 13:04:59
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/25/20 17:19:01
 random_array.asm					     Page 1 - 1
 
 
@@ -124,10 +124,10 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
  000000A2  88 07		          mov [edi], al
 
 				          .if indicator == 0    ;// Proverava da li je u pitanju pocetna dodela vrednosti
- 000000AA  88 03		               mov [ebx], al
+ 000000AA  88 03		          mov[ebx], al
  000000AC  43			               inc ebx
 				          .endif
-				          
+
  000000AD  46			          inc esi
  000000AE  47			          inc edi
 
@@ -138,6 +138,7 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 
 
  000000B9			     the_end:
+
  000000B9  5B			          pop ebx
  000000BA  58			          pop eax
  000000BB  5F			          pop edi
@@ -147,7 +148,7 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 
  000000C2			random_array ENDP
 				END
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/25/20 13:04:59
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/25/20 17:19:01
 random_array.asm					     Symbols 2 - 1
 
 
