@@ -4,19 +4,23 @@ INCLUDE procedure.inc
 .data
 
      ; //promenljive za dodelu brojeva bojama
-     red_num dword 0
-     blue_num dword 0
-     green_num dword 0
-     yellow_num dword 0
+     red_num byte 0
+     blue_num byte 0
+     green_num byte 0
+     yellow_num byte 0
 
 .code
 
 random_array PROC,
-                    Arr: PTR BYTE
+                    Arr: PTR BYTE,
+                    ArrSetup: PTR BYTE,
+                    indicator: BYTE
 
           push ecx
           push esi
           push edi
+          push eax
+          push ebx
 
      variable_reset : ;//reset igre
           mov red_num, 0
@@ -27,19 +31,20 @@ random_array PROC,
           mov ecx, 4
           mov esi, 0
           mov edi, Arr
+          mov ebx, ArrSetup
 
      assign:;//generisanje random niza
           mov eax, 4
           call RandomRange
           add eax, 1
 
-          CMP eax, red_num
+          CMP al, red_num
           JE assign
-          CMP eax, blue_num
+          CMP al, blue_num
           JE assign
-          CMP eax, green_num
+          CMP al, green_num
           JE assign
-          CMP eax, yellow_num
+          CMP al, yellow_num
           JE assign
 
           CMP esi, 0
@@ -57,19 +62,19 @@ random_array PROC,
      ;// Dodela vrednosti konstantama
 
      assign_first:
-          mov red_num, eax
+          mov red_num, al
           jmp assign_array
 
      assign_second :
-          mov blue_num, eax
+          mov blue_num, al
           jmp assign_array
 
      assign_third :
-          mov green_num, eax
+          mov green_num, al
           jmp assign_array
 
      assign_fourth :
-          mov yellow_num, eax
+          mov yellow_num, al
           jmp assign_array
 
 
@@ -82,7 +87,12 @@ random_array PROC,
 
      assign_array : ;// Upisivanje vrednosti u niz
 
-          mov BYTE PTR [edi], al
+          mov [edi], al
+
+          .if indicator == 0    ;// Proverava da li je u pitanju pocetna dodela vrednosti
+               mov [ebx], al
+               inc ebx
+          .endif
           
           inc esi
           inc edi
@@ -94,6 +104,8 @@ random_array PROC,
 
 
      the_end:
+          pop ebx
+          pop eax
           pop edi
           pop esi
           pop ecx

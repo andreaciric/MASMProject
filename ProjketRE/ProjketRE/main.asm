@@ -15,12 +15,12 @@ ExitProcess PROTO, dwExitCode:DWORD
 
 .data?
 
-     arrayGame dword n dup(?)          ;//niz brojeva dodeljivanih u toku igre za random redosled kvadrata
-     arraySetup dword n dup(?)          ;//inicijalna dodela brojeva bojama
+     arrayGame BYTE n dup(?)          ;//niz brojeva dodeljivanih u toku igre za random redosled kvadrata
+     arraySetup BYTE n dup(?)          ;//inicijalna dodela brojeva bojama
 
      .code
           main PROC
-               INVOKE random_array, OFFSET ArrayGame
+               INVOKE random_array, OFFSET ArrayGame, OFFSET ArraySetup, assign_array_indicator
                INVOKE ExitProcess, 0
 
 
