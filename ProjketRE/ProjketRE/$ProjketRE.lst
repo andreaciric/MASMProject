@@ -1,5 +1,5 @@
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/25/20 17:19:01
-random_array.asm					     Page 1 - 1
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/25/20 22:13:02
+main.asm						     Page 1 - 1
 
 
 				INCLUDE Irvine32.inc
@@ -30,126 +30,109 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 			      C                     ArrSetup: PTR BYTE,
 			      C                     indicator: BYTE
 			      C 
+			      C 
+			      C draw_square PROTO,
+			      C                     xposition: BYTE,
+			      C                     yposition: BYTE,
+			      C                     color: PTR BYTE
+			      C 
+			      C 
+
+				.386
+				.model flat, stdcall
+main.asm(5) : warning A4011:multiple .MODEL directives found : .MODEL ignored
+				.stack 4096
+				ExitProcess PROTO, dwExitCode:DWORD
+
+ 00000000			.const
+ = 00000004			     n = 4     ; //broj elemenata niza  
 
  00000000			.data
 
-				     ; //promenljive za dodelu brojeva bojama
- 00000000 00			     red_num byte 0
- 00000001 00			     blue_num byte 0
- 00000002 00			     green_num byte 0
- 00000003 00			     yellow_num byte 0
+ 00000000 00			     assign_array_indicator BYTE 0      ;//indikator pocetnog niza
+ 00000001 00 01 02 04 0E	     colors BYTE 0h, 1h, 2h, 4h, 0Eh
 
- 00000000			.code
+ 00000000			.data?
 
- 00000000			random_array PROC,
-				                    Arr: PTR BYTE,
-				                    ArrSetup: PTR BYTE,
-				                    indicator: BYTE
+ 00000000  00000004 [		     arrayGame BYTE n dup(?)          ;//niz brojeva dodeljivanih u toku igre za random redosled kvadrata
+	    00
+	   ]
+ 00000004  00000004 [		     arraySetup BYTE n dup(?)          ;//inicijalna dodela brojeva bojama
+	    00
+	   ]
+ 00000008 00			     xposition BYTE ?
+ 00000009 00			     yposition BYTE ?
 
- 00000003  51			          push ecx
- 00000004  56			          push esi
- 00000005  57			          push edi
- 00000006  50			          push eax
- 00000007  53			          push ebx
+ 00000000			     .code
+ 00000000			          main PROC
+				          INVOKE random_array, OFFSET arrayGame, OFFSET arraySetup, assign_array_indicator
 
- 00000008			     variable_reset : ;//reset igre
- 00000008  C6 05 00000000 R	          mov red_num, 0
-	   00
- 0000000F  C6 05 00000001 R	          mov blue_num, 0
-	   00
- 00000016  C6 05 00000002 R	          mov green_num, 0
-	   00
- 0000001D  C6 05 00000003 R	          mov yellow_num, 0
-	   00
+ 00000015  BA 00000000		               mov edx, 0
+ 0000001A			          draw:
+ 0000001A  BB 00000000 R	               mov ebx, OFFSET arrayGame
+ 0000001F  8B 0B		               mov ecx, [ebx]
+ 00000021  0F B6 C1		               movzx eax, cl
+ 00000024  8B C8		               mov ecx, eax
+ 00000026  B8 00000001 R	               mov eax, OFFSET colors
+ 0000002B  BE 00000000		               mov esi, 0h
+				               
+				               .while (esi != ecx)
+ 00000032  46			                    inc esi
+ 00000033  40			                    inc eax
+				               .endw
 
- 00000024  B9 00000004		          mov ecx, 4
- 00000029  BE 00000000		          mov esi, 0
- 0000002E  8B 7D 08		          mov edi, Arr
- 00000031  8B 5D 0C		          mov ebx, ArrSetup
+ 00000038  83 FA 00		               CMP edx, 0
+ 0000003B  74 0F		               JE first_square
+ 0000003D  83 FA 01		               CMP edx, 1
+ 00000040  74 1F		               JE second_square
+ 00000042  83 FA 02		               CMP edx, 2
+ 00000045  74 2F		               JE third_square
+ 00000047  83 FA 03		               CMP edx, 3
+ 0000004A  74 3F		               JE fourth_square
 
- 00000034			     assign:;//generisanje random niza
- 00000034  B8 00000004		          mov eax, 4
- 00000039  E8 00000000 E	          call RandomRange
- 0000003E  83 C0 01		          add eax, 1
+ 0000004C			          first_square:
+ 0000004C  C6 05 00000008 R	               mov xposition, 15
+	   0F
+ 00000053  C6 05 00000009 R	               mov yposition, 1
+	   01
+ 0000005A  BA 00000001		               mov edx, 1
+ 0000005F  EB 3D		               JMP variables_set
 
- 00000041  3A 05 00000000 R	          CMP al, red_num
- 00000047  74 EB		          JE assign
- 00000049  3A 05 00000001 R	          CMP al, blue_num
- 0000004F  74 E3		          JE assign
- 00000051  3A 05 00000002 R	          CMP al, green_num
- 00000057  74 DB		          JE assign
- 00000059  3A 05 00000003 R	          CMP al, yellow_num
- 0000005F  74 D3		          JE assign
+ 00000061			          second_square :
+ 00000061  C6 05 00000008 R	               mov xposition, 35
+	   23
+ 00000068  C6 05 00000009 R	               mov yposition, 1
+	   01
+ 0000006F  BA 00000002		               mov edx, 2
+ 00000074  EB 28		               JMP variables_set
 
- 00000061  83 FE 00		          CMP esi, 0
- 00000064  74 14		          JE assign_first
- 00000066  83 FE 01		          CMP esi, 1
- 00000069  74 16		          JE assign_second
- 0000006B  83 FE 02		          CMP esi, 2
- 0000006E  74 18		          JE assign_third
- 00000070  83 FE 03		          CMP esi, 3
- 00000073  74 1A		          JE assign_fourth
- 00000075  83 FE 04		          CMP esi, 4
- 00000078  74 1C		          JE assign_end
+ 00000076			          third_square :
+ 00000076  C6 05 00000008 R	               mov xposition, 15
+	   0F
+ 0000007D  C6 05 00000009 R	               mov yposition, 10
+	   0A
+ 00000084  BA 00000003		               mov edx, 3
+ 00000089  EB 13		               JMP variables_set
 
+ 0000008B			          fourth_square :
+ 0000008B  C6 05 00000008 R	               mov xposition, 35
+	   23
+ 00000092  C6 05 00000009 R	               mov yposition, 10
+	   0A
+ 00000099  BA 00000004		               mov edx, 4
+				                     
+ 0000009E			          variables_set:
+				               INVOKE draw_square, xposition, yposition, eax
+ 000000B0  83 FA 04		               CMP edx, 4
+ 000000B3  0F 85 FFFFFF61	               JNE draw
+				               
+				               
+				               INVOKE ExitProcess, 0
 
-				     ;// Dodela vrednosti konstantama
-
- 0000007A			     assign_first:
- 0000007A  A2 00000000 R	          mov red_num, al
- 0000007F  EB 21		          jmp assign_array
-
- 00000081			     assign_second :
- 00000081  A2 00000001 R	          mov blue_num, al
- 00000086  EB 1A		          jmp assign_array
-
- 00000088			     assign_third :
- 00000088  A2 00000002 R	          mov green_num, al
- 0000008D  EB 13		          jmp assign_array
-
- 0000008F			     assign_fourth :
- 0000008F  A2 00000003 R	          mov yellow_num, al
- 00000094  EB 0C		          jmp assign_array
-
-
- 00000096			     assign_end :
- 00000096  B9 00000004		          mov ecx, 4
- 0000009B  BE 00000000		          mov esi, 0
-
- 000000A0  EB 17		          jmp the_end
-
-
- 000000A2			     assign_array : ;// Upisivanje vrednosti u niz
-
- 000000A2  88 07		          mov [edi], al
-
-				          .if indicator == 0    ;// Proverava da li je u pitanju pocetna dodela vrednosti
- 000000AA  88 03		          mov[ebx], al
- 000000AC  43			               inc ebx
-				          .endif
-
- 000000AD  46			          inc esi
- 000000AE  47			          inc edi
-
-				          ; //loop assign
- 000000AF  49			          dec ecx
- 000000B0  83 F9 00		          cmp ecx, 0
- 000000B3  0F 85 FFFFFF7B	          jnz assign
-
-
- 000000B9			     the_end:
-
- 000000B9  5B			          pop ebx
- 000000BA  58			          pop eax
- 000000BB  5F			          pop edi
- 000000BC  5E			          pop esi
- 000000BD  59			          pop ecx
-				          ret
-
- 000000C2			random_array ENDP
-				END
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/25/20 17:19:01
-random_array.asm					     Symbols 2 - 1
+ 000000C0			     main ENDP
+				END main
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/25/20 22:13:02
+main.asm						     Symbols 2 - 1
 
 
 
@@ -240,10 +223,12 @@ Segments and Groups:
 
                 N a m e                 Size     Length   Align   Combine Class
 
+CONST  . . . . . . . . . . . . .	32 Bit	 00000000 Para	  Public  'CONST'	 ReadOnly
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000004 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000C2 Para	  Public  'CODE'	
+_BSS . . . . . . . . . . . . . .	32 Bit	 0000000A Para	  Public  'BSS'  
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000006 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000C0 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -350,20 +335,16 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+draw_square  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000C0 Public STDCALL
+  draw . . . . . . . . . . . . .	L Near	 0000001A _TEXT	
+  first_square . . . . . . . . .	L Near	 0000004C _TEXT	
+  second_square  . . . . . . . .	L Near	 00000061 _TEXT	
+  third_square . . . . . . . . .	L Near	 00000076 _TEXT	
+  fourth_square  . . . . . . . .	L Near	 0000008B _TEXT	
+  variables_set  . . . . . . . .	L Near	 0000009E _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-random_array . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000C2 Public STDCALL
-  Arr  . . . . . . . . . . . . .	DWord	 bp + 00000008
-  ArrSetup . . . . . . . . . . .	DWord	 bp + 0000000C
-  indicator  . . . . . . . . . .	Byte	 bp + 00000010
-  variable_reset . . . . . . . .	L Near	 00000008 _TEXT	
-  assign . . . . . . . . . . . .	L Near	 00000034 _TEXT	
-  assign_first . . . . . . . . .	L Near	 0000007A _TEXT	
-  assign_second  . . . . . . . .	L Near	 00000081 _TEXT	
-  assign_third . . . . . . . . .	L Near	 00000088 _TEXT	
-  assign_fourth  . . . . . . . .	L Near	 0000008F _TEXT	
-  assign_end . . . . . . . . . .	L Near	 00000096 _TEXT	
-  assign_array . . . . . . . . .	L Near	 000000A2 _TEXT	
-  the_end  . . . . . . . . . . .	L Near	 000000B9 _TEXT	
+random_array . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
@@ -581,14 +562,16 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
+arrayGame  . . . . . . . . . . .	Byte	 00000000 _BSS	
+arraySetup . . . . . . . . . . .	Byte	 00000004 _BSS	
+assign_array_indicator . . . . .	Byte	 00000000 _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
-blue_num . . . . . . . . . . . .	Byte	 00000001 _DATA	
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
+colors . . . . . . . . . . . . .	Byte	 00000001 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
-green_num  . . . . . . . . . . .	Byte	 00000002 _DATA	
 green  . . . . . . . . . . . . .	Number	 00000002h   
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
@@ -597,12 +580,13 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
-red_num  . . . . . . . . . . . .	Byte	 00000000 _DATA	
+n  . . . . . . . . . . . . . . .	Number	 00000004h   
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
-yellow_num . . . . . . . . . . .	Byte	 00000003 _DATA	
+xposition  . . . . . . . . . . .	Byte	 00000008 _BSS	
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
+yposition  . . . . . . . . . . .	Byte	 00000009 _BSS	
 
-	   1 Warnings
+	   2 Warnings
 	   0 Errors
