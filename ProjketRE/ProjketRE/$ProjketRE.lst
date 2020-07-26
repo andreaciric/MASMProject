@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 20:06:54
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 20:55:17
 start.asm						     Page 1 - 1
 
 
@@ -45,123 +45,154 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 
  00000000			.data
 
- 00000000 44 6F 62 72 6F	Welcome_message1 BYTE    "Dobrodosli u Repeat the Pattern Igricu!", 0dh, 0ah,
-	   64 6F 73 6C 69
-	   20 75 20 52 65
-	   70 65 61 74 20
-	   74 68 65 20 50
-	   61 74 74 65 72
-	   6E 20 49 67 72
-	   69 63 75 21 0D
-	   0A 20 20 0D 0A
-	   50 72 61 76 69
-	   6C 61 20 73 75
-	   20 6A 65 64 6E
-	   6F 73 74 61 76
-	   6E 61 3A 20 0D
-	   0A 31 2E 20 4E
-	   61 20 70 6F 63
-	   65 74 6B 75 20
-	   69 67 72 69 63
-	   65 20 73 76 61
-	   6B 6F 6A 20 62
-	   6F 6A 69 20 64
-	   6F 64 6A 65 6C
-	   6A 65 6E 20 6A
-	   65 20 6F 64 67
-	   6F 76 61 72 61
-	   6A 75 63 69 20
-	   62 72 6F 6A 2E
-	   0D 0A 00
-				                         "  ", 0dh, 0ah,
-				                         "Pravila su jednostavna: ", 0dh, 0ah,
-				                         "1. Na pocetku igrice svakoj boji dodjeljen je odgovarajuci broj.", 0dh, 0ah, 0
+ 00000000 52 65 70 65 61	winTitle BYTE "Repeat Pattern Game", 0
+	   74 20 50 61 74
+	   74 65 72 6E 20
+	   47 61 6D 65 00
 
- 0000008A 32 2E 20 49 67	Welcome_message2 BYTE    "2. Igrica se igra pritiskom odgovarajuceg broja za boju kvadrata.", 0dh, 0ah,
-	   72 69 63 61 20
-	   73 65 20 69 67
-	   72 61 20 70 72
-	   69 74 69 73 6B
-	   6F 6D 20 6F 64
-	   67 6F 76 61 72
-	   61 6A 75 63 65
-	   67 20 62 72 6F
-	   6A 61 20 7A 61
-	   20 62 6F 6A 75
-	   20 6B 76 61 64
-	   72 61 74 61 2E
-	   0D 0A 33 2E 20
-	   50 72 69 74 69
-	   73 6B 6F 6D 20
-	   6E 61 20 65 6E
-	   74 65 72 20 70
-	   6F 74 76 72 64
-	   6A 75 6A 65 20
-	   73 65 20 76 61
-	   73 20 75 6E 6F
-	   73 20 62 72 6F
-	   6A 61 20 7A 61
-	   20 74 61 6A 20
-	   6B 76 61 64 72
-	   61 74 2E 0D 0A
+ 00000014 57 65 6C 63 6F	Welcome_message1 BYTE    "Welcome to the Repeat Pattern Game!", 0dh, 0ah,
+	   6D 65 20 74 6F
+	   20 74 68 65 20
+	   52 65 70 65 61
+	   74 20 50 61 74
+	   74 65 72 6E 20
+	   47 61 6D 65 21
+	   0D 0A 20 20 0D
+	   0A 52 75 6C 65
+	   73 3A 20 0D 0A
+	   31 2E 20 41 74
+	   20 74 68 65 20
+	   62 65 67 69 6E
+	   6E 69 6E 67 20
+	   6F 66 20 74 68
+	   65 20 67 61 6D
+	   65 2C 20 74 68
+	   65 72 65 20 61
+	   72 65 20 34 20
+	   73 71 75 61 72
+	   65 73 20 69 6E
+	   20 64 69 66 66
+	   65 72 65 6E 74
+	   20 63 6F 6C 6F
+	   72 73 20 61 6E
+	   64 20 65 61 63
+	   68 20 63 6F 6C
+	   6F 72 20 69 73
+	   20 61 73 73 69
+	   67 6E 65 64 20
+	   61 20 72 61 6E
+	   64 6F 6D 20 6E
+	   75 6D 62 65 72
+	   20 66 72 6F 6D
+	   20 31 20 74 6F
+	   20 34 0D 0A 00
+				                         "  ", 0dh, 0ah,
+				                         "Rules: ", 0dh, 0ah,
+				                         "1. At the beginning of the game, there are 4 squares in different colors and each color is assigned a random number from 1 to 4", 0dh, 0ah, 0
+				                       
+ 000000C8 32 2E 20 59 6F	Welcome_message2 BYTE    "2. You have to remember which number corresponds to which color.", 0dh, 0ah,
+	   75 20 68 61 76
+	   65 20 74 6F 20
+	   72 65 6D 65 6D
+	   62 65 72 20 77
+	   68 69 63 68 20
+	   6E 75 6D 62 65
+	   72 20 63 6F 72
+	   72 65 73 70 6F
+	   6E 64 73 20 74
+	   6F 20 77 68 69
+	   63 68 20 63 6F
+	   6C 6F 72 2E 0D
+	   0A 33 2E 20 4F
+	   72 64 65 72 20
+	   6F 66 20 63 6F
+	   6C 6F 72 65 64
+	   20 73 71 75 61
+	   72 65 73 20 63
+	   68 61 6E 67 65
+	   73 20 69 6E 20
+	   65 76 65 72 79
+	   20 74 75 72 6E
+	   20 61 6E 64 20
+	   79 6F 75 20 68
+	   61 76 65 20 74
+	   6F 20 77 72 69
+	   74 65 20 74 68
+	   65 20 63 6F 72
+	   72 65 73 70 6F
+	   6E 64 69 6E 67
+	   20 6E 75 6D 62
+	   65 72 73 20 69
+	   6E 20 74 68 65
+	   20 73 61 6D 65
+	   20 6F 72 64 65
+	   72 20 61 73 20
+	   67 69 76 65 6E
+	   20 73 71 75 61
+	   72 65 73 0D 0A
 	   00
-				                         "3. Pritiskom na enter potvrdjuje se vas unos broja za taj kvadrat.", 0dh, 0ah, 0
+				                         "3. Order of colored squares changes in every turn and you have to write the corresponding numbers in the same order as given squares", 0dh, 0ah, 0
 
- 00000112 34 2E 20 52 65	Welcome_message3 BYTE    "4. Red kvadrata pocinje u gornjem lijevom uglu i prati oblik slova Z.", 0dh, 0ah,
-	   64 20 6B 76 61
-	   64 72 61 74 61
-	   20 70 6F 63 69
-	   6E 6A 65 20 75
-	   20 67 6F 72 6E
-	   6A 65 6D 20 6C
-	   69 6A 65 76 6F
-	   6D 20 75 67 6C
-	   75 20 69 20 70
-	   72 61 74 69 20
-	   6F 62 6C 69 6B
-	   20 73 6C 6F 76
-	   61 20 5A 2E 0D
-	   0A 35 2E 20 4E
-	   61 6B 6F 6E 20
-	   75 73 70 6A 65
-	   73 6E 65 20 73
-	   65 6B 76 65 6E
-	   63 65 20 6B 76
-	   61 64 72 61 74
-	   69 20 73 65 20
-	   72 65 67 65 6E
-	   65 72 69 73 75
-	   20 70 6F 20 73
-	   6C 75 63 61 6A
-	   6E 69 6D 20 62
-	   6F 6A 61 6D 61
-	   2E 0D 0A 36 2E
-	   20 49 6D 61 74
-	   65 20 36 30 20
-	   73 65 6B 75 6E
-	   64 69 20 64 61
-	   20 70 6F 67 6F
-	   64 69 74 65 20
-	   73 74 6F 20 76
-	   69 73 65 20 6B
-	   6F 6D 62 69 6E
-	   61 63 69 6A 61
-	   2E 0D 0A 20 20
-	   0D 0A 50 72 69
-	   74 69 73 6E 69
-	   74 65 20 62 69
-	   6C 6F 20 6B 6F
-	   6A 69 20 74 61
-	   73 74 65 72 20
-	   7A 61 20 70 6F
-	   63 65 74 61 6B
-	   20 69 67 72 69
-	   63 65 2E 2E 2E
-	   0D 0A 00
-				                         "5. Nakon uspjesne sekvence kvadrati se regenerisu po slucajnim bojama.", 0dh, 0ah,
-				                         "6. Imate 60 sekundi da pogodite sto vise kombinacija.", 0dh, 0ah,
+ 00000191 34 2E 20 41 72	Welcome_message3 BYTE    "4. Arrey is given in the order: upper left -> upper right -> lower left -> lower right.", 0dh, 0ah,
+	   72 65 79 20 69
+	   73 20 67 69 76
+	   65 6E 20 69 6E
+	   20 74 68 65 20
+	   6F 72 64 65 72
+	   3A 20 75 70 70
+	   65 72 20 6C 65
+	   66 74 20 2D 3E
+	   20 75 70 70 65
+	   72 20 72 69 67
+	   68 74 20 2D 3E
+	   20 6C 6F 77 65
+	   72 20 6C 65 66
+	   74 20 2D 3E 20
+	   6C 6F 77 65 72
+	   20 72 69 67 68
+	   74 2E 0D 0A 35
+	   2E 20 45 61 63
+	   68 20 74 69 6D
+	   65 20 79 6F 75
+	   20 65 6E 74 65
+	   72 20 61 20 73
+	   75 63 63 65 73
+	   73 66 75 6C 20
+	   73 65 71 75 65
+	   6E 63 65 2C 20
+	   74 68 65 20 73
+	   71 75 61 72 65
+	   73 20 6F 72 64
+	   65 72 20 69 73
+	   20 72 65 67 65
+	   6E 65 72 61 74
+	   65 64 0D 0A 36
+	   2E 20 59 6F 75
+	   20 68 61 76 65
+	   20 36 30 20 73
+	   65 63 6F 6E 64
+	   73 20 74 6F 20
+	   67 65 74 20 61
+	   73 20 6D 61 6E
+	   79 20 63 6F 6D
+	   62 69 6E 61 74
+	   69 6F 6E 73 20
+	   61 73 20 70 6F
+	   73 73 69 62 6C
+	   65 0D 0A 20 20
+	   0D 0A 50 72 65
+	   73 73 20 61 6E
+	   79 20 6B 65 79
+	   20 74 6F 20 73
+	   74 61 72 74 20
+	   74 68 65 20 67
+	   61 6D 65 2E 2E
+	   2E 0D 0A 00
+				                         "5. Each time you enter a successful sequence, the squares order is regenerated", 0dh, 0ah,
+				                         "6. You have 60 seconds to get as many combinations as possible", 0dh, 0ah,
 				                         "  ", 0dh, 0ah,
-				                         "Pritisnite bilo koji taster za pocetak igrice...", 0dh, 0ah, 0
+				                         "Press any key to start the game...", 0dh, 0ah, 0
+
 
  00000000			.code
 				;//---------------------------------------------------------------------------------------------------------------------
@@ -171,25 +202,27 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
  00000000  52			          push edx
  00000001  50			          push eax
 				     
- 00000002  E8 00000000 E	          call clrscr
- 00000007  B8 0000000F		          mov eax, 15
- 0000000C  E8 00000000 E	          call SetTextColor
- 00000011  BA 00000000 R	          mov edx, OFFSET Welcome_message1
- 00000016  E8 00000000 E	          call WriteString
- 0000001B  BA 0000008A R	          mov edx, OFFSET Welcome_message2
+				          INVOKE SetConsoleTitle, ADDR winTitle;// Naslov konzole
+
+ 0000000C  E8 00000000 E	          call clrscr
+ 00000011  B8 0000000F		          mov eax, 15
+ 00000016  E8 00000000 E	          call SetTextColor
+ 0000001B  BA 00000014 R	          mov edx, OFFSET Welcome_message1
  00000020  E8 00000000 E	          call WriteString
- 00000025  BA 00000112 R	          mov edx, OFFSET Welcome_message3
+ 00000025  BA 000000C8 R	          mov edx, OFFSET Welcome_message2
  0000002A  E8 00000000 E	          call WriteString
- 0000002F  E8 00000000 E	          call readchar
- 00000034  E8 00000000 E	          call clrscr
+ 0000002F  BA 00000191 R	          mov edx, OFFSET Welcome_message3
+ 00000034  E8 00000000 E	          call WriteString
+ 00000039  E8 00000000 E	          call readchar
+ 0000003E  E8 00000000 E	          call clrscr
 
- 00000039  58			          pop eax
- 0000003A  5A			          pop edx
- 0000003B  C3			          ret
+ 00000043  58			          pop eax
+ 00000044  5A			          pop edx
+ 00000045  C3			          ret
 
- 0000003C			     start_setup ENDP
+ 00000046			     start_setup ENDP
 				END
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 20:06:54
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 20:55:17
 start.asm						     Symbols 2 - 1
 
 
@@ -283,8 +316,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 0000020F Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000003C Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 000002A3 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000046 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -396,7 +429,7 @@ draw_square  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 random_array . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-start_setup  . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000003C Public STDCALL
+start_setup  . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000046 Public STDCALL
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -611,9 +644,9 @@ VK_SUBTRACT  . . . . . . . . . .	Number	 0000006Dh
 VK_TAB . . . . . . . . . . . . .	Number	 00000009h   
 VK_UP  . . . . . . . . . . . . .	Number	 00000026h   
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
-Welcome_message1 . . . . . . . .	Byte	 00000000 _DATA	
-Welcome_message2 . . . . . . . .	Byte	 0000008A _DATA	
-Welcome_message3 . . . . . . . .	Byte	 00000112 _DATA	
+Welcome_message1 . . . . . . . .	Byte	 00000014 _DATA	
+Welcome_message2 . . . . . . . .	Byte	 000000C8 _DATA	
+Welcome_message3 . . . . . . . .	Byte	 00000191 _DATA	
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
 black  . . . . . . . . . . . . .	Number	 00000000h   
@@ -632,6 +665,7 @@ lightRed . . . . . . . . . . . .	Number	 0000000Ch
 magenta  . . . . . . . . . . . .	Number	 00000005h   
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
+winTitle . . . . . . . . . . . .	Byte	 00000000 _DATA	
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
 

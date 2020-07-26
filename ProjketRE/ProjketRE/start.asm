@@ -3,19 +3,22 @@ INCLUDE procedure.inc
 
 .data
 
-Welcome_message1 BYTE    "Dobrodosli u Repeat the Pattern Igricu!", 0dh, 0ah,
-                         "  ", 0dh, 0ah,
-                         "Pravila su jednostavna: ", 0dh, 0ah,
-                         "1. Na pocetku igrice svakoj boji dodjeljen je odgovarajuci broj.", 0dh, 0ah, 0
+winTitle BYTE "Repeat Pattern Game", 0
 
-Welcome_message2 BYTE    "2. Igrica se igra pritiskom odgovarajuceg broja za boju kvadrata.", 0dh, 0ah,
-                         "3. Pritiskom na enter potvrdjuje se vas unos broja za taj kvadrat.", 0dh, 0ah, 0
-
-Welcome_message3 BYTE    "4. Red kvadrata pocinje u gornjem lijevom uglu i prati oblik slova Z.", 0dh, 0ah,
-                         "5. Nakon uspjesne sekvence kvadrati se regenerisu po slucajnim bojama.", 0dh, 0ah,
-                         "6. Imate 60 sekundi da pogodite sto vise kombinacija.", 0dh, 0ah,
+Welcome_message1 BYTE    "Welcome to the Repeat Pattern Game!", 0dh, 0ah,
                          "  ", 0dh, 0ah,
-                         "Pritisnite bilo koji taster za pocetak igrice...", 0dh, 0ah, 0
+                         "Rules: ", 0dh, 0ah,
+                         "1. At the beginning of the game, there are 4 squares in different colors and each color is assigned a random number from 1 to 4", 0dh, 0ah, 0
+                       
+Welcome_message2 BYTE    "2. You have to remember which number corresponds to which color.", 0dh, 0ah,
+                         "3. Order of colored squares changes in every turn and you have to write the corresponding numbers in the same order as given squares", 0dh, 0ah, 0
+
+Welcome_message3 BYTE    "4. Arrey is given in the order: upper left -> upper right -> lower left -> lower right.", 0dh, 0ah,
+                         "5. Each time you enter a successful sequence, the squares order is regenerated", 0dh, 0ah,
+                         "6. You have 60 seconds to get as many combinations as possible", 0dh, 0ah,
+                         "  ", 0dh, 0ah,
+                         "Press any key to start the game...", 0dh, 0ah, 0
+
 
 .code
 ;//---------------------------------------------------------------------------------------------------------------------
@@ -25,6 +28,8 @@ Welcome_message3 BYTE    "4. Red kvadrata pocinje u gornjem lijevom uglu i prati
           push edx
           push eax
      
+          INVOKE SetConsoleTitle, ADDR winTitle;// Naslov konzole
+
           call clrscr
           mov eax, 15
           call SetTextColor
