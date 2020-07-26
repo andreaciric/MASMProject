@@ -23,63 +23,9 @@ ExitProcess PROTO, dwExitCode:DWORD
 
      .code
           main PROC
-          INVOKE random_array, OFFSET arrayGame, OFFSET arraySetup, assign_array_indicator
-
-               mov edx, 0
-               mov ebx, OFFSET arrayGame
-          draw:
-               
-               mov ecx, [ebx]
-               movzx eax, cl
-               mov ecx, eax
-               mov eax, OFFSET colors
-               mov esi, 0h
-               
-               .while (esi != ecx)
-                    inc esi
-                    inc eax
-               .endw
-
-               CMP edx, 0
-               JE first_square
-               CMP edx, 1
-               JE second_square
-               CMP edx, 2
-               JE third_square
-               CMP edx, 3
-               JE fourth_square
-
-          first_square:
-               mov xposition, 15
-               mov yposition, 1
-               mov edx, 1
-               JMP variables_set
-
-          second_square :
-               mov xposition, 15
-               mov yposition, 20
-               mov edx, 2
-               JMP variables_set
-
-          third_square :
-               
-               mov xposition, 25
-               mov yposition, 1
-               mov edx, 3
-               JMP variables_set
-
-          fourth_square :
-               mov xposition, 25
-               mov yposition, 20
-               mov edx, 4
-                     
-          variables_set:
-               INVOKE draw_square, xposition, yposition, eax
-               inc ebx
-               CMP edx, 4
-               JNE draw
-               
-               
+               INVOKE random_array, OFFSET arrayGame, OFFSET arraySetup, assign_array_indicator
+               INVOKE draw_squares, OFFSET arrayGame
+                            
                INVOKE ExitProcess, 0
 
      main ENDP

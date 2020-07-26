@@ -12,3 +12,5 @@ draw_square PROTO,
                     yposition: BYTE,
                     color: PTR BYTE
 
+draw_squares PROTO,
+                    Arr: PTR BYTE

@@ -21,7 +21,7 @@
     <MASM Include="random_array.asm">
       <Filter>Source Files</Filter>
     </MASM>
-    <MASM Include="draw_square.asm">
+    <MASM Include="draw_squares.asm">
       <Filter>Source Files</Filter>
     </MASM>
   </ItemGroup>
