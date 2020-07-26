@@ -13,7 +13,7 @@ Welcome_message1 BYTE    "Welcome to the Repeat Pattern Game!", 0dh, 0ah,
 Welcome_message2 BYTE    "2. You have to remember which number corresponds to which color.", 0dh, 0ah,
                          "3. Order of colored squares changes in every turn and you have to write the corresponding numbers in the same order as given squares", 0dh, 0ah, 0
 
-Welcome_message3 BYTE    "4. Arrey is given in the order: upper left -> upper right -> lower left -> lower right.", 0dh, 0ah,
+Welcome_message3 BYTE    "4. Array is given in the order: upper left -> upper right -> lower left -> lower right.", 0dh, 0ah,
                          "5. Each time you enter a successful sequence, the squares order is regenerated", 0dh, 0ah,
                          "6. You have 60 seconds to get as many combinations as possible", 0dh, 0ah,
                          "  ", 0dh, 0ah,

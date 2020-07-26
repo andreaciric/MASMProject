@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 20:55:17
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 21:17:41
 start.asm						     Page 1 - 1
 
 
@@ -133,8 +133,8 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 	   00
 				                         "3. Order of colored squares changes in every turn and you have to write the corresponding numbers in the same order as given squares", 0dh, 0ah, 0
 
- 00000191 34 2E 20 41 72	Welcome_message3 BYTE    "4. Arrey is given in the order: upper left -> upper right -> lower left -> lower right.", 0dh, 0ah,
-	   72 65 79 20 69
+ 00000191 34 2E 20 41 72	Welcome_message3 BYTE    "4. Array is given in the order: upper left -> upper right -> lower left -> lower right.", 0dh, 0ah,
+	   72 61 79 20 69
 	   73 20 67 69 76
 	   65 6E 20 69 6E
 	   20 74 68 65 20
@@ -222,7 +222,7 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 
  00000046			     start_setup ENDP
 				END
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 20:55:17
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 21:17:41
 start.asm						     Symbols 2 - 1
 
 
