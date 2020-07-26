@@ -22,6 +22,8 @@ random_array PROC,
           push eax
           push ebx
 
+          call randomize
+
      variable_reset : ;//reset igre
           mov red_num, 0
           mov blue_num, 0
