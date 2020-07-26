@@ -43,7 +43,7 @@ INCLUDE procedure.inc
           pop ebx
           pop eax
           pop edx
-
+          ret
      draw_square ENDP
 
      

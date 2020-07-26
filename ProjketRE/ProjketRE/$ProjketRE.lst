@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 11:36:48
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 15:28:29
 main.asm						     Page 1 - 1
 
 
@@ -68,8 +68,9 @@ main.asm(5) : warning A4011:multiple .MODEL directives found : .MODEL ignored
 				          INVOKE random_array, OFFSET arrayGame, OFFSET arraySetup, assign_array_indicator
 
  00000015  BA 00000000		               mov edx, 0
- 0000001A			          draw:
  0000001A  BB 00000000 R	               mov ebx, OFFSET arrayGame
+ 0000001F			          draw:
+				               
  0000001F  8B 0B		               mov ecx, [ebx]
  00000021  0F B6 C1		               movzx eax, cl
  00000024  8B C8		               mov ecx, eax
@@ -99,40 +100,41 @@ main.asm(5) : warning A4011:multiple .MODEL directives found : .MODEL ignored
  0000005F  EB 3D		               JMP variables_set
 
  00000061			          second_square :
- 00000061  C6 05 00000008 R	               mov xposition, 35
-	   23
- 00000068  C6 05 00000009 R	               mov yposition, 1
-	   01
+ 00000061  C6 05 00000008 R	               mov xposition, 15
+	   0F
+ 00000068  C6 05 00000009 R	               mov yposition, 20
+	   14
  0000006F  BA 00000002		               mov edx, 2
  00000074  EB 28		               JMP variables_set
 
  00000076			          third_square :
- 00000076  C6 05 00000008 R	               mov xposition, 15
-	   0F
- 0000007D  C6 05 00000009 R	               mov yposition, 10
-	   0A
+				               
+ 00000076  C6 05 00000008 R	               mov xposition, 25
+	   19
+ 0000007D  C6 05 00000009 R	               mov yposition, 1
+	   01
  00000084  BA 00000003		               mov edx, 3
  00000089  EB 13		               JMP variables_set
 
  0000008B			          fourth_square :
- 0000008B  C6 05 00000008 R	               mov xposition, 35
-	   23
- 00000092  C6 05 00000009 R	               mov yposition, 10
-	   0A
+ 0000008B  C6 05 00000008 R	               mov xposition, 25
+	   19
+ 00000092  C6 05 00000009 R	               mov yposition, 20
+	   14
  00000099  BA 00000004		               mov edx, 4
 				                     
  0000009E			          variables_set:
 				               INVOKE draw_square, xposition, yposition, eax
  000000B0  43			               inc ebx
  000000B1  83 FA 04		               CMP edx, 4
- 000000B4  0F 85 FFFFFF60	               JNE draw
+ 000000B4  0F 85 FFFFFF65	               JNE draw
 				               
 				               
 				               INVOKE ExitProcess, 0
 
  000000C1			     main ENDP
 				END main
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 11:36:48
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 15:28:29
 main.asm						     Symbols 2 - 1
 
 
@@ -338,7 +340,7 @@ WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 draw_square  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000C1 Public STDCALL
-  draw . . . . . . . . . . . . .	L Near	 0000001A _TEXT	
+  draw . . . . . . . . . . . . .	L Near	 0000001F _TEXT	
   first_square . . . . . . . . .	L Near	 0000004C _TEXT	
   second_square  . . . . . . . .	L Near	 00000061 _TEXT	
   third_square . . . . . . . . .	L Near	 00000076 _TEXT	

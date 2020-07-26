@@ -26,8 +26,9 @@ ExitProcess PROTO, dwExitCode:DWORD
           INVOKE random_array, OFFSET arrayGame, OFFSET arraySetup, assign_array_indicator
 
                mov edx, 0
-          draw:
                mov ebx, OFFSET arrayGame
+          draw:
+               
                mov ecx, [ebx]
                movzx eax, cl
                mov ecx, eax
@@ -55,20 +56,21 @@ ExitProcess PROTO, dwExitCode:DWORD
                JMP variables_set
 
           second_square :
-               mov xposition, 35
-               mov yposition, 1
+               mov xposition, 15
+               mov yposition, 20
                mov edx, 2
                JMP variables_set
 
           third_square :
-               mov xposition, 15
-               mov yposition, 10
+               
+               mov xposition, 25
+               mov yposition, 1
                mov edx, 3
                JMP variables_set
 
           fourth_square :
-               mov xposition, 35
-               mov yposition, 10
+               mov xposition, 25
+               mov yposition, 20
                mov edx, 4
                      
           variables_set:
