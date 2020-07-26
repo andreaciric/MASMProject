@@ -23,9 +23,9 @@ ExitProcess PROTO, dwExitCode:DWORD
      .code
           main PROC
           again:
-               INVOKE start_setup
+               INVOKE start_screen
                INVOKE random_array, OFFSET arrayGame, OFFSET arraySetup, assign_array_indicator
-               INVOKE example_page, OFFSET arraySetup
+               INVOKE example_screen, OFFSET arraySetup
                
                INVOKE ExitProcess, 0
 

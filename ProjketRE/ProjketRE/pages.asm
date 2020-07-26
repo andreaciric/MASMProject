@@ -23,7 +23,7 @@ Welcome_message3 BYTE    "4. Array is given in the order: upper left -> upper ri
 .code
 ;//---------------------------------------------------------------------------------------------------------------------
 ;//This function sets startup screen
-     start_setup PROC
+     start_screen PROC
                    
           push edx
           push eax
@@ -46,12 +46,12 @@ Welcome_message3 BYTE    "4. Array is given in the order: upper left -> upper ri
           pop edx
           ret
 
-     start_setup ENDP
+     start_screen ENDP
 
 ;//-----------------------------------------------------------------------------
 ;// 
 ;//
-     example_page PROC,
+     example_screen PROC,
                          Arr: PTR BYTE       ;//pointer to given arrayGame
 ;//-----------------------------------------------------------------------------
 
@@ -65,5 +65,5 @@ Welcome_message3 BYTE    "4. Array is given in the order: upper left -> upper ri
                pop edx
                ret
 
-     example_page ENDP
+     example_screen ENDP
 END

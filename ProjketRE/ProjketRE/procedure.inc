@@ -16,9 +16,9 @@ draw_squares PROTO,
                     Arr: PTR BYTE
 
 
-start_setup PROTO
+start_screen PROTO
 
 
-example_page PROTO,
+example_screen PROTO,
                     Arr: PTR BYTE 
 
