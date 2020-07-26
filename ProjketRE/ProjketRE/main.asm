@@ -73,6 +73,7 @@ ExitProcess PROTO, dwExitCode:DWORD
                      
           variables_set:
                INVOKE draw_square, xposition, yposition, eax
+               inc ebx
                CMP edx, 4
                JNE draw
                

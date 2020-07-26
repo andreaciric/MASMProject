@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/25/20 22:13:02
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 11:36:48
 main.asm						     Page 1 - 1
 
 
@@ -123,15 +123,16 @@ main.asm(5) : warning A4011:multiple .MODEL directives found : .MODEL ignored
 				                     
  0000009E			          variables_set:
 				               INVOKE draw_square, xposition, yposition, eax
- 000000B0  83 FA 04		               CMP edx, 4
- 000000B3  0F 85 FFFFFF61	               JNE draw
+ 000000B0  43			               inc ebx
+ 000000B1  83 FA 04		               CMP edx, 4
+ 000000B4  0F 85 FFFFFF60	               JNE draw
 				               
 				               
 				               INVOKE ExitProcess, 0
 
- 000000C0			     main ENDP
+ 000000C1			     main ENDP
 				END main
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/25/20 22:13:02
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 11:36:48
 main.asm						     Symbols 2 - 1
 
 
@@ -228,7 +229,7 @@ FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _BSS . . . . . . . . . . . . . .	32 Bit	 0000000A Para	  Public  'BSS'  
 _DATA  . . . . . . . . . . . . .	32 Bit	 00000006 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000C0 Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000C1 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -336,7 +337,7 @@ WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 draw_square  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000C0 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000C1 Public STDCALL
   draw . . . . . . . . . . . . .	L Near	 0000001A _TEXT	
   first_square . . . . . . . . .	L Near	 0000004C _TEXT	
   second_square  . . . . . . . .	L Near	 00000061 _TEXT	
