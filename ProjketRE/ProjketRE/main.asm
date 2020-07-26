@@ -15,19 +15,19 @@ ExitProcess PROTO, dwExitCode:DWORD
      colors BYTE 0h, 1h, 2h, 4h, 0Eh
      score BYTE 0
 
+
 .data?
 
      arrayGame BYTE n dup(?)          ;//niz brojeva dodeljivanih u toku igre za random redosled kvadrata
      arraySetup BYTE n dup(?)          ;//inicijalna dodela brojeva bojama
-     xposition BYTE ?
-     yposition BYTE ?
 
      .code
           main PROC
+
           again:
-               INVOKE start_setup
+               INVOKE start_screen
                INVOKE random_array, OFFSET arrayGame, OFFSET arraySetup, assign_array_indicator
-               INVOKE draw_squares, OFFSET arrayGame
+               INVOKE example_screen, OFFSET arraySetup
                
                INVOKE ExitProcess, 0
 
