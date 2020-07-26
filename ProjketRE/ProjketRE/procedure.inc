@@ -15,5 +15,10 @@ draw_square PROTO,
 draw_squares PROTO,
                     Arr: PTR BYTE
 
+
 start_setup PROTO
+
+
+example_page PROTO,
+                    Arr: PTR BYTE 
 

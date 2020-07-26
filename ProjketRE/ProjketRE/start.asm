@@ -47,4 +47,23 @@ Welcome_message3 BYTE    "4. Array is given in the order: upper left -> upper ri
           ret
 
      start_setup ENDP
+
+;//-----------------------------------------------------------------------------
+;// 
+;//
+     example_page PROC,
+                         Arr: PTR BYTE       ;//pointer to given arrayGame
+;//-----------------------------------------------------------------------------
+
+
+               push edx
+               push eax
+
+               INVOKE draw_squares, Arr
+
+               pop eax
+               pop edx
+               ret
+
+     example_page ENDP
 END
