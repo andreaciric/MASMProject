@@ -24,6 +24,9 @@
     <MASM Include="draw_squares.asm">
       <Filter>Source Files</Filter>
     </MASM>
+    <MASM Include="start.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
     <None Include="procedure.inc">

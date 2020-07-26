@@ -1,5 +1,5 @@
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 19:06:13
-random_array.asm					     Page 1 - 1
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 20:06:54
+start.asm						     Page 1 - 1
 
 
 				INCLUDE Irvine32.inc
@@ -39,128 +39,158 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 			      C draw_squares PROTO,
 			      C                     Arr: PTR BYTE
 			      C 
+			      C start_setup PROTO
+			      C 
+			      C 
 
  00000000			.data
 
-				     ; //promenljive za dodelu brojeva bojama
- 00000000 00			     red_num byte 0
- 00000001 00			     blue_num byte 0
- 00000002 00			     green_num byte 0
- 00000003 00			     yellow_num byte 0
+ 00000000 44 6F 62 72 6F	Welcome_message1 BYTE    "Dobrodosli u Repeat the Pattern Igricu!", 0dh, 0ah,
+	   64 6F 73 6C 69
+	   20 75 20 52 65
+	   70 65 61 74 20
+	   74 68 65 20 50
+	   61 74 74 65 72
+	   6E 20 49 67 72
+	   69 63 75 21 0D
+	   0A 20 20 0D 0A
+	   50 72 61 76 69
+	   6C 61 20 73 75
+	   20 6A 65 64 6E
+	   6F 73 74 61 76
+	   6E 61 3A 20 0D
+	   0A 31 2E 20 4E
+	   61 20 70 6F 63
+	   65 74 6B 75 20
+	   69 67 72 69 63
+	   65 20 73 76 61
+	   6B 6F 6A 20 62
+	   6F 6A 69 20 64
+	   6F 64 6A 65 6C
+	   6A 65 6E 20 6A
+	   65 20 6F 64 67
+	   6F 76 61 72 61
+	   6A 75 63 69 20
+	   62 72 6F 6A 2E
+	   0D 0A 00
+				                         "  ", 0dh, 0ah,
+				                         "Pravila su jednostavna: ", 0dh, 0ah,
+				                         "1. Na pocetku igrice svakoj boji dodjeljen je odgovarajuci broj.", 0dh, 0ah, 0
+
+ 0000008A 32 2E 20 49 67	Welcome_message2 BYTE    "2. Igrica se igra pritiskom odgovarajuceg broja za boju kvadrata.", 0dh, 0ah,
+	   72 69 63 61 20
+	   73 65 20 69 67
+	   72 61 20 70 72
+	   69 74 69 73 6B
+	   6F 6D 20 6F 64
+	   67 6F 76 61 72
+	   61 6A 75 63 65
+	   67 20 62 72 6F
+	   6A 61 20 7A 61
+	   20 62 6F 6A 75
+	   20 6B 76 61 64
+	   72 61 74 61 2E
+	   0D 0A 33 2E 20
+	   50 72 69 74 69
+	   73 6B 6F 6D 20
+	   6E 61 20 65 6E
+	   74 65 72 20 70
+	   6F 74 76 72 64
+	   6A 75 6A 65 20
+	   73 65 20 76 61
+	   73 20 75 6E 6F
+	   73 20 62 72 6F
+	   6A 61 20 7A 61
+	   20 74 61 6A 20
+	   6B 76 61 64 72
+	   61 74 2E 0D 0A
+	   00
+				                         "3. Pritiskom na enter potvrdjuje se vas unos broja za taj kvadrat.", 0dh, 0ah, 0
+
+ 00000112 34 2E 20 52 65	Welcome_message3 BYTE    "4. Red kvadrata pocinje u gornjem lijevom uglu i prati oblik slova Z.", 0dh, 0ah,
+	   64 20 6B 76 61
+	   64 72 61 74 61
+	   20 70 6F 63 69
+	   6E 6A 65 20 75
+	   20 67 6F 72 6E
+	   6A 65 6D 20 6C
+	   69 6A 65 76 6F
+	   6D 20 75 67 6C
+	   75 20 69 20 70
+	   72 61 74 69 20
+	   6F 62 6C 69 6B
+	   20 73 6C 6F 76
+	   61 20 5A 2E 0D
+	   0A 35 2E 20 4E
+	   61 6B 6F 6E 20
+	   75 73 70 6A 65
+	   73 6E 65 20 73
+	   65 6B 76 65 6E
+	   63 65 20 6B 76
+	   61 64 72 61 74
+	   69 20 73 65 20
+	   72 65 67 65 6E
+	   65 72 69 73 75
+	   20 70 6F 20 73
+	   6C 75 63 61 6A
+	   6E 69 6D 20 62
+	   6F 6A 61 6D 61
+	   2E 0D 0A 36 2E
+	   20 49 6D 61 74
+	   65 20 36 30 20
+	   73 65 6B 75 6E
+	   64 69 20 64 61
+	   20 70 6F 67 6F
+	   64 69 74 65 20
+	   73 74 6F 20 76
+	   69 73 65 20 6B
+	   6F 6D 62 69 6E
+	   61 63 69 6A 61
+	   2E 0D 0A 20 20
+	   0D 0A 50 72 69
+	   74 69 73 6E 69
+	   74 65 20 62 69
+	   6C 6F 20 6B 6F
+	   6A 69 20 74 61
+	   73 74 65 72 20
+	   7A 61 20 70 6F
+	   63 65 74 61 6B
+	   20 69 67 72 69
+	   63 65 2E 2E 2E
+	   0D 0A 00
+				                         "5. Nakon uspjesne sekvence kvadrati se regenerisu po slucajnim bojama.", 0dh, 0ah,
+				                         "6. Imate 60 sekundi da pogodite sto vise kombinacija.", 0dh, 0ah,
+				                         "  ", 0dh, 0ah,
+				                         "Pritisnite bilo koji taster za pocetak igrice...", 0dh, 0ah, 0
 
  00000000			.code
+				;//---------------------------------------------------------------------------------------------------------------------
+				;//This function sets startup screen
+ 00000000			     start_setup PROC
+				                   
+ 00000000  52			          push edx
+ 00000001  50			          push eax
+				     
+ 00000002  E8 00000000 E	          call clrscr
+ 00000007  B8 0000000F		          mov eax, 15
+ 0000000C  E8 00000000 E	          call SetTextColor
+ 00000011  BA 00000000 R	          mov edx, OFFSET Welcome_message1
+ 00000016  E8 00000000 E	          call WriteString
+ 0000001B  BA 0000008A R	          mov edx, OFFSET Welcome_message2
+ 00000020  E8 00000000 E	          call WriteString
+ 00000025  BA 00000112 R	          mov edx, OFFSET Welcome_message3
+ 0000002A  E8 00000000 E	          call WriteString
+ 0000002F  E8 00000000 E	          call readchar
+ 00000034  E8 00000000 E	          call clrscr
 
- 00000000			random_array PROC,
-				                    Arr: PTR BYTE,
-				                    ArrSetup: PTR BYTE,
-				                    indicator: BYTE
+ 00000039  58			          pop eax
+ 0000003A  5A			          pop edx
+ 0000003B  C3			          ret
 
- 00000003  51			          push ecx
- 00000004  56			          push esi
- 00000005  57			          push edi
- 00000006  50			          push eax
- 00000007  53			          push ebx
-
- 00000008  E8 00000000 E	          call randomize
-
- 0000000D			     variable_reset : ;//reset igre
- 0000000D  C6 05 00000000 R	          mov red_num, 0
-	   00
- 00000014  C6 05 00000001 R	          mov blue_num, 0
-	   00
- 0000001B  C6 05 00000002 R	          mov green_num, 0
-	   00
- 00000022  C6 05 00000003 R	          mov yellow_num, 0
-	   00
-
- 00000029  B9 00000004		          mov ecx, 4
- 0000002E  BE 00000000		          mov esi, 0
- 00000033  8B 7D 08		          mov edi, Arr
- 00000036  8B 5D 0C		          mov ebx, ArrSetup
-
- 00000039			     assign:;//generisanje random niza
- 00000039  B8 00000004		          mov eax, 4
- 0000003E  E8 00000000 E	          call RandomRange
- 00000043  83 C0 01		          add eax, 1
-
- 00000046  3A 05 00000000 R	          CMP al, red_num
- 0000004C  74 EB		          JE assign
- 0000004E  3A 05 00000001 R	          CMP al, blue_num
- 00000054  74 E3		          JE assign
- 00000056  3A 05 00000002 R	          CMP al, green_num
- 0000005C  74 DB		          JE assign
- 0000005E  3A 05 00000003 R	          CMP al, yellow_num
- 00000064  74 D3		          JE assign
-
- 00000066  83 FE 00		          CMP esi, 0
- 00000069  74 14		          JE assign_first
- 0000006B  83 FE 01		          CMP esi, 1
- 0000006E  74 16		          JE assign_second
- 00000070  83 FE 02		          CMP esi, 2
- 00000073  74 18		          JE assign_third
- 00000075  83 FE 03		          CMP esi, 3
- 00000078  74 1A		          JE assign_fourth
- 0000007A  83 FE 04		          CMP esi, 4
- 0000007D  74 1C		          JE assign_end
-
-
-				     ;// Dodela vrednosti konstantama
-
- 0000007F			     assign_first:
- 0000007F  A2 00000000 R	          mov red_num, al
- 00000084  EB 21		          jmp assign_array
-
- 00000086			     assign_second :
- 00000086  A2 00000001 R	          mov blue_num, al
- 0000008B  EB 1A		          jmp assign_array
-
- 0000008D			     assign_third :
- 0000008D  A2 00000002 R	          mov green_num, al
- 00000092  EB 13		          jmp assign_array
-
- 00000094			     assign_fourth :
- 00000094  A2 00000003 R	          mov yellow_num, al
- 00000099  EB 0C		          jmp assign_array
-
-
- 0000009B			     assign_end :
- 0000009B  B9 00000004		          mov ecx, 4
- 000000A0  BE 00000000		          mov esi, 0
-
- 000000A5  EB 17		          jmp the_end
-
-
- 000000A7			     assign_array : ;// Upisivanje vrednosti u niz
-
- 000000A7  88 07		          mov [edi], al
-
-				          .if indicator == 0    ;// Proverava da li je u pitanju pocetna dodela vrednosti
- 000000AF  88 03		          mov[ebx], al
- 000000B1  43			               inc ebx
-				          .endif
-
- 000000B2  46			          inc esi
- 000000B3  47			          inc edi
-
-				          ; //loop assign
- 000000B4  49			          dec ecx
- 000000B5  83 F9 00		          cmp ecx, 0
- 000000B8  0F 85 FFFFFF7B	          jnz assign
-
-
- 000000BE			     the_end:
-
- 000000BE  5B			          pop ebx
- 000000BF  58			          pop eax
- 000000C0  5F			          pop edi
- 000000C1  5E			          pop esi
- 000000C2  59			          pop ecx
-				          ret
-
- 000000C7			random_array ENDP
+ 0000003C			     start_setup ENDP
 				END
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 19:06:13
-random_array.asm					     Symbols 2 - 1
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 20:06:54
+start.asm						     Symbols 2 - 1
 
 
 
@@ -253,8 +283,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000004 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000C7 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000020F Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000003C Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -364,20 +394,9 @@ WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 draw_squares . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 draw_square  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-random_array . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000C7 Public STDCALL
-  Arr  . . . . . . . . . . . . .	DWord	 bp + 00000008
-  ArrSetup . . . . . . . . . . .	DWord	 bp + 0000000C
-  indicator  . . . . . . . . . .	Byte	 bp + 00000010
-  variable_reset . . . . . . . .	L Near	 0000000D _TEXT	
-  assign . . . . . . . . . . . .	L Near	 00000039 _TEXT	
-  assign_first . . . . . . . . .	L Near	 0000007F _TEXT	
-  assign_second  . . . . . . . .	L Near	 00000086 _TEXT	
-  assign_third . . . . . . . . .	L Near	 0000008D _TEXT	
-  assign_fourth  . . . . . . . .	L Near	 00000094 _TEXT	
-  assign_end . . . . . . . . . .	L Near	 0000009B _TEXT	
-  assign_array . . . . . . . . .	L Near	 000000A7 _TEXT	
-  the_end  . . . . . . . . . . .	L Near	 000000BE _TEXT	
+random_array . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
+start_setup  . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000003C Public STDCALL
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -592,16 +611,17 @@ VK_SUBTRACT  . . . . . . . . . .	Number	 0000006Dh
 VK_TAB . . . . . . . . . . . . .	Number	 00000009h   
 VK_UP  . . . . . . . . . . . . .	Number	 00000026h   
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
+Welcome_message1 . . . . . . . .	Byte	 00000000 _DATA	
+Welcome_message2 . . . . . . . .	Byte	 0000008A _DATA	
+Welcome_message3 . . . . . . . .	Byte	 00000112 _DATA	
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
 black  . . . . . . . . . . . . .	Number	 00000000h   
-blue_num . . . . . . . . . . . .	Byte	 00000001 _DATA	
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
-green_num  . . . . . . . . . . .	Byte	 00000002 _DATA	
 green  . . . . . . . . . . . . .	Number	 00000002h   
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
@@ -610,11 +630,9 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
-red_num  . . . . . . . . . . . .	Byte	 00000000 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
-yellow_num . . . . . . . . . . .	Byte	 00000003 _DATA	
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
 
 	   1 Warnings

@@ -13,6 +13,7 @@ ExitProcess PROTO, dwExitCode:DWORD
 
      assign_array_indicator BYTE 0      ;//indikator pocetnog niza
      colors BYTE 0h, 1h, 2h, 4h, 0Eh
+     score BYTE 0
 
 .data?
 
@@ -23,9 +24,11 @@ ExitProcess PROTO, dwExitCode:DWORD
 
      .code
           main PROC
+          again:
+               INVOKE start_setup
                INVOKE random_array, OFFSET arrayGame, OFFSET arraySetup, assign_array_indicator
                INVOKE draw_squares, OFFSET arrayGame
-                            
+               
                INVOKE ExitProcess, 0
 
      main ENDP
