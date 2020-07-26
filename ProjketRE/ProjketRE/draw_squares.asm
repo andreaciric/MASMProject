@@ -2,60 +2,69 @@ INCLUDE Irvine32.inc
 INCLUDE procedure.inc
 
 .data
-     colors BYTE 0h, 1h, 2h, 4h, 0Eh
+colors BYTE 0h, 1h, 2h, 4h, 0Eh
 
 .data?
      xposition BYTE ?
      yposition BYTE ?
 
 .code
-
+;//---------------------------------------------------------------------------
+;// This procedure draws a square in given colour at given starting position
      draw_square PROC,
-                         xpos: BYTE,
+                         xpos: BYTE,         
                          ypos: BYTE,
                          color: PTR BYTE
 
-          
+;//---------------------------------------------------------------------------
           push edx
           push eax
           push ebx
           push edi
           push esi
-          
-          mov esi, 16
-          mov edi, 8
-          mov dh, xpos
-          mov dl, ypos
-          mov ebx, color
-          mov ecx, [ebx]
-          movzx eax, cl
-          call SetTextColor
-          mov al, 0DBh
 
-          .WHILE (esi > 0)
-               .WHILE (edi > 0)
-                    call gotoxy
-                    call WriteChar
-                    dec edi
-                    inc dh
+          ;//dimensions of a square (how many 0DBh objects in a row and column)
+          mov esi, 16
+               mov edi, 8
+
+          ;//setting parameters for drawing functions
+          mov dh, xpos
+               mov dl, ypos
+               mov ebx, color
+               mov ecx, [ebx]
+               movzx eax, cl
+               call SetTextColor
+               mov al, 0DBh
+
+          ;//drawing 0DBh objects 
+          .WHILE(esi > 0)
+               .WHILE(edi > 0)
+               call gotoxy
+               call WriteChar
+               dec edi
+               inc dh
                .ENDW
                mov dh, xpos
                mov edi, 8
                dec esi
                inc dl
-          .ENDW
-         
-          pop esi
-          pop edi
-          pop ebx
-          pop eax
-          pop edx
-          ret
+               .ENDW
+
+               pop esi
+               pop edi
+               pop ebx
+               pop eax
+               pop edx
+               ret
      draw_square ENDP
 
+;//-----------------------------------------------------------------------------
+;//This procedure sets parameters for all four squares 
+;//and calls draw_square procedure for each square
+  
      draw_squares PROC,
-                         Arr: PTR BYTE
-
+                         Arr: PTR BYTE  ;//pointer to given arrayGame
+;//-----------------------------------------------------------------------------
                pushad
 
                mov edx, 0
@@ -68,6 +77,7 @@ INCLUDE procedure.inc
                mov eax, OFFSET colors
                mov esi, 0h
 
+               ;//sets a color for each square
                .while (esi != ecx)
                     inc esi
                     inc eax
@@ -82,6 +92,7 @@ INCLUDE procedure.inc
                CMP edx, 3
                JE fourth_square
 
+          ;//setting position of squares
           first_square :
                mov xposition, 1
                mov yposition, 1

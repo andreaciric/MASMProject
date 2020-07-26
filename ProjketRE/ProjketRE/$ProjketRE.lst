@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 18:11:47
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 18:58:01
 draw_squares.asm					     Page 1 - 1
 
 
@@ -41,60 +41,69 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 			      C 
 
  00000000			.data
- 00000000 00 01 02 04 0E	     colors BYTE 0h, 1h, 2h, 4h, 0Eh
+ 00000000 00 01 02 04 0E	colors BYTE 0h, 1h, 2h, 4h, 0Eh
 
  00000000			.data?
  00000000 00			     xposition BYTE ?
  00000001 00			     yposition BYTE ?
 
  00000000			.code
-
+				;//---------------------------------------------------------------------------
+				;// This procedure draws a square in given colour at given starting position
  00000000			     draw_square PROC,
-				                         xpos: BYTE,
+				                         xpos: BYTE,         
 				                         ypos: BYTE,
 				                         color: PTR BYTE
 
-				          
+				;//---------------------------------------------------------------------------
  00000003  52			          push edx
  00000004  50			          push eax
  00000005  53			          push ebx
  00000006  57			          push edi
  00000007  56			          push esi
-				          
- 00000008  BE 00000010		          mov esi, 16
- 0000000D  BF 00000008		          mov edi, 8
- 00000012  8A 75 08		          mov dh, xpos
- 00000015  8A 55 0C		          mov dl, ypos
- 00000018  8B 5D 10		          mov ebx, color
- 0000001B  8B 0B		          mov ecx, [ebx]
- 0000001D  0F B6 C1		          movzx eax, cl
- 00000020  E8 00000000 E	          call SetTextColor
- 00000025  B0 DB		          mov al, 0DBh
 
-				          .WHILE (esi > 0)
-				               .WHILE (edi > 0)
- 0000002B  E8 00000000 E	                    call gotoxy
- 00000030  E8 00000000 E	                    call WriteChar
- 00000035  4F			                    dec edi
- 00000036  FE C6		                    inc dh
+				          ;//dimensions of a square (how many 0DBh objects in a row and column)
+ 00000008  BE 00000010		          mov esi, 16
+ 0000000D  BF 00000008		               mov edi, 8
+
+				          ;//setting parameters for drawing functions
+ 00000012  8A 75 08		          mov dh, xpos
+ 00000015  8A 55 0C		               mov dl, ypos
+ 00000018  8B 5D 10		               mov ebx, color
+ 0000001B  8B 0B		               mov ecx, [ebx]
+ 0000001D  0F B6 C1		               movzx eax, cl
+ 00000020  E8 00000000 E	               call SetTextColor
+ 00000025  B0 DB		               mov al, 0DBh
+
+				          ;//drawing 0DBh objects 
+				          .WHILE(esi > 0)
+				               .WHILE(edi > 0)
+ 0000002B  E8 00000000 E	               call gotoxy
+ 00000030  E8 00000000 E	               call WriteChar
+ 00000035  4F			               dec edi
+ 00000036  FE C6		               inc dh
 				               .ENDW
  0000003D  8A 75 08		               mov dh, xpos
  00000040  BF 00000008		               mov edi, 8
  00000045  4E			               dec esi
  00000046  FE C2		               inc dl
-				          .ENDW
-				         
- 0000004D  5E			          pop esi
- 0000004E  5F			          pop edi
- 0000004F  5B			          pop ebx
- 00000050  58			          pop eax
- 00000051  5A			          pop edx
-				          ret
+				               .ENDW
+
+ 0000004D  5E			               pop esi
+ 0000004E  5F			               pop edi
+ 0000004F  5B			               pop ebx
+ 00000050  58			               pop eax
+ 00000051  5A			               pop edx
+				               ret
  00000056			     draw_square ENDP
 
+				;//-----------------------------------------------------------------------------
+				;//This procedure sets parameters for all four squares 
+				;//and calls draw_square procedure for each square
+				  
  00000056			     draw_squares PROC,
-				                         Arr: PTR BYTE
-
+				                         Arr: PTR BYTE  ;//pointer to given arrayGame
+				;//-----------------------------------------------------------------------------
  00000059  60			               pushad
 
  0000005A  BA 00000000		               mov edx, 0
@@ -107,6 +116,7 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
  00000069  B8 00000000 R	               mov eax, OFFSET colors
  0000006E  BE 00000000		               mov esi, 0h
 
+				               ;//sets a color for each square
 				               .while (esi != ecx)
  00000075  46			                    inc esi
  00000076  40			                    inc eax
@@ -121,6 +131,7 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
  0000008A  83 FA 03		               CMP edx, 3
  0000008D  74 3F		               JE fourth_square
 
+				          ;//setting position of squares
  0000008F			          first_square :
  0000008F  C6 05 00000000 R	               mov xposition, 1
 	   01
@@ -163,7 +174,7 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
  00000102			     draw_squares ENDP
 				     
 				END
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 18:11:47
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 18:58:01
 draw_squares.asm					     Symbols 2 - 1
 
 
