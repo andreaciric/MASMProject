@@ -57,7 +57,8 @@ INCLUDE procedure.inc
 ;// 
 ;//
      example_screen PROC,
-                         Arr: PTR BYTE       ;//pointer to given arrayGame
+                         Arr: PTR BYTE, ;//pointer to given arrayGame
+                         OutArrColors: PTR BYTE
 ;//-----------------------------------------------------------------------------
 
                push edx
@@ -65,7 +66,7 @@ INCLUDE procedure.inc
                push ecx
                push ebx
 
-               INVOKE draw_squares, Arr
+               INVOKE draw_squares, Arr, OutArrColors
                
                mov eax, 15
                call SetTextColor

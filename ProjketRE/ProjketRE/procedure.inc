@@ -10,15 +10,18 @@ random_array PROTO,
 draw_square PROTO,
                     xposition: BYTE,
                     yposition: BYTE,
-                    color: PTR BYTE
+                    color: PTR BYTE,
+                    k: PTR dword
 
 draw_squares PROTO,
-                    Arr: PTR BYTE
+                    Arr: PTR BYTE,  ;//pointer to given arrayGame
+                    OutArr: PTR BYTE
 
 
 start_screen PROTO
 
 
 example_screen PROTO,
-                    Arr: PTR BYTE 
+                    Arr: PTR BYTE,  ;//pointer to given arrayGame
+                    OutArr: PTR BYTE
 

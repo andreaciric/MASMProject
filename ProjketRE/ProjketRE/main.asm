@@ -20,6 +20,7 @@ ExitProcess PROTO, dwExitCode:DWORD
 
      arrayGame BYTE n dup(?)          ;//niz brojeva dodeljivanih u toku igre za random redosled kvadrata
      arraySetup BYTE n dup(?)          ;//inicijalna dodela brojeva bojama
+     arrayOutColors BYTE n dup(?)
 
      .code
           main PROC
@@ -27,7 +28,7 @@ ExitProcess PROTO, dwExitCode:DWORD
           again:
                INVOKE start_screen
                INVOKE random_array, OFFSET arrayGame, OFFSET arraySetup, assign_array_indicator
-               INVOKE example_screen, OFFSET arraySetup
+               INVOKE example_screen, OFFSET arraySetup, OFFSET arrayOutColors
                
                INVOKE ExitProcess, 0
 

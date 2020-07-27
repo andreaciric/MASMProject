@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 22:19:03
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/27/20 20:54:00
 pages.asm						     Page 1 - 1
 
 
@@ -34,17 +34,20 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 			      C draw_square PROTO,
 			      C                     xposition: BYTE,
 			      C                     yposition: BYTE,
-			      C                     color: PTR BYTE
+			      C                     color: PTR BYTE,
+			      C                     k: PTR dword
 			      C 
 			      C draw_squares PROTO,
-			      C                     Arr: PTR BYTE
+			      C                     Arr: PTR BYTE,  ;//pointer to given arrayGame
+			      C                     OutArr: PTR BYTE
 			      C 
 			      C 
 			      C start_screen PROTO
 			      C 
 			      C 
 			      C example_screen PROTO,
-			      C                     Arr: PTR BYTE 
+			      C                     Arr: PTR BYTE,  ;//pointer to given arrayGame
+			      C                     OutArr: PTR BYTE
 			      C 
 			      C 
 
@@ -248,7 +251,8 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 				;// 
 				;//
  00000046			     example_screen PROC,
-				                         Arr: PTR BYTE       ;//pointer to given arrayGame
+				                         Arr: PTR BYTE, ;//pointer to given arrayGame
+				                         OutArrColors: PTR BYTE
 				;//-----------------------------------------------------------------------------
 
  00000049  52			               push edx
@@ -256,34 +260,34 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
  0000004B  51			               push ecx
  0000004C  53			               push ebx
 
-				               INVOKE draw_squares, Arr
+				               INVOKE draw_squares, Arr, OutArrColors
 				               
- 00000055  B8 0000000F		               mov eax, 15
- 0000005A  E8 00000000 E	               call SetTextColor
+ 00000058  B8 0000000F		               mov eax, 15
+ 0000005D  E8 00000000 E	               call SetTextColor
 
- 0000005F  BA 000002A3 R	               mov edx, OFFSET Color_message
- 00000064  E8 00000000 E	               call WriteString
+ 00000062  BA 000002A3 R	               mov edx, OFFSET Color_message
+ 00000067  E8 00000000 E	               call WriteString
 
- 00000069  B9 00000004		               mov ecx, 4
- 0000006E  8B 55 08		               mov edx, Arr
- 00000071			            L:
- 00000071  8B 1A		               mov ebx, [edx]
- 00000073  0F B6 C3		               movzx eax, bl
- 00000076  E8 00000000 E	               call WriteDec
- 0000007B  B0 20		               mov al, 20h
- 0000007D  E8 00000000 E	               call WriteChar
- 00000082  42			               inc edx
- 00000083  E2 EC		               loop L
+ 0000006C  B9 00000004		               mov ecx, 4
+ 00000071  8B 55 08		               mov edx, Arr
+ 00000074			            L:
+ 00000074  8B 1A		               mov ebx, [edx]
+ 00000076  0F B6 C3		               movzx eax, bl
+ 00000079  E8 00000000 E	               call WriteDec
+ 0000007E  B0 20		               mov al, 20h
+ 00000080  E8 00000000 E	               call WriteChar
+ 00000085  42			               inc edx
+ 00000086  E2 EC		               loop L
 
- 00000085  5B			               pop ebx
- 00000086  59			               pop ecx
- 00000087  58			               pop eax
- 00000088  5A			               pop edx
+ 00000088  5B			               pop ebx
+ 00000089  59			               pop ecx
+ 0000008A  58			               pop eax
+ 0000008B  5A			               pop edx
 				               ret
 
- 0000008D			     example_screen ENDP
+ 00000090			     example_screen ENDP
 				END
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 22:19:03
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/27/20 20:54:00
 pages.asm						     Symbols 2 - 1
 
 
@@ -378,7 +382,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 000002E4 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000008D Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000090 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -487,9 +491,10 @@ WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 draw_squares . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 draw_square  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-example_screen . . . . . . . . .	P Near	 00000046 _TEXT	Length= 00000047 Public STDCALL
+example_screen . . . . . . . . .	P Near	 00000046 _TEXT	Length= 0000004A Public STDCALL
   Arr  . . . . . . . . . . . . .	DWord	 bp + 00000008
-  L  . . . . . . . . . . . . . .	L Near	 00000071 _TEXT	
+  OutArrColors . . . . . . . . .	DWord	 bp + 0000000C
+  L  . . . . . . . . . . . . . .	L Near	 00000074 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 random_array . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
