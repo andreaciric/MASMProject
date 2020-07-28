@@ -27,6 +27,9 @@
     <MASM Include="pages.asm">
       <Filter>Source Files</Filter>
     </MASM>
+    <MASM Include="answer.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
     <None Include="procedure.inc">

@@ -25,3 +25,8 @@ example_screen PROTO,
                     Arr: PTR BYTE,  ;//pointer to given arrayGame
                     OutArr: PTR BYTE
 
+get_answer PROTO,
+                         Arr: PTR BYTE,                ;//pointer to given arraySetup
+                         OutArrColors: PTR BYTE,
+                         AnswerArr: PTR BYTE
+     
