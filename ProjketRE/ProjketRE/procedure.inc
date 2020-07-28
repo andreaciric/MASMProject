@@ -30,3 +30,6 @@ get_answer PROTO,
                          OutArrColors: PTR BYTE,
                          AnswerArr: PTR BYTE
      
+ game_screen PROTO,
+                         Arr: PTR BYTE, ;//pointer to given arrayGame
+                         OutArrColors: PTR BYTE

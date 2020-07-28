@@ -24,7 +24,8 @@ INCLUDE procedure.inc
                               " ", 0dh, 0ah,
                               "Redosled boja po sekvenci je: PLAVA ZELENA CRVENA ZUTA -> ", 0
 
-
+     Blank_message  BYTE      " ", 0dh, 0ah,
+                              " ", 0dh, 0ah,0
 .code
 ;//---------------------------------------------------------------------------------------------------------------------
 ;//This function sets startup screen
@@ -85,6 +86,9 @@ INCLUDE procedure.inc
                inc edx
                loop L
 
+               mov edx, OFFSET Blank_message
+               call WriteString
+
                pop ebx
                pop ecx
                pop eax
@@ -92,4 +96,27 @@ INCLUDE procedure.inc
                ret
 
      example_screen ENDP
+
+     game_screen PROC,
+                         Arr: PTR BYTE, ;//pointer to given arrayGame
+                         OutArrColors: PTR BYTE
+               ;//-----------------------------------------------------------------------------
+
+          push edx
+          push eax
+          
+
+          INVOKE draw_squares, Arr, OutArrColors
+
+          mov eax, 15
+          call SetTextColor
+
+          mov edx, OFFSET Blank_message
+          call WriteString
+         
+          pop eax
+          pop edx
+          ret
+
+      game_screen ENDP
 END

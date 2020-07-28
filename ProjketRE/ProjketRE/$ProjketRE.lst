@@ -1,5 +1,5 @@
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/28/20 20:53:23
-answer.asm						     Page 1 - 1
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/28/20 21:06:56
+main.asm						     Page 1 - 1
 
 
 				INCLUDE Irvine32.inc
@@ -54,80 +54,57 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 			      C                          OutArrColors: PTR BYTE,
 			      C                          AnswerArr: PTR BYTE
 			      C      
+			      C  game_screen PROTO,
+			      C                          Arr: PTR BYTE, ;//pointer to given arrayGame
+			      C                          OutArrColors: PTR BYTE
 			      C 
 
+				.386
+				.model flat, stdcall
+main.asm(5) : warning A4011:multiple .MODEL directives found : .MODEL ignored
+				.stack 4096
+				ExitProcess PROTO, dwExitCode:DWORD
+
+ 00000000			.const
+ = 00000004			     n = 4     ; //broj elemenata niza  
+
  00000000			.data
- 00000000 00			     temp BYTE 0
 
- 00000000			.code
+ 00000000 00			     assign_array_indicator BYTE 0      ;//indikator pocetnog niza
+ 00000001 00 01 02 04 0E	     colors BYTE 0h, 1h, 2h, 4h, 0Eh
+ 00000006 00			     score BYTE 0
 
- 00000000			    get_answer PROC,
-				                         Arr: PTR BYTE,                ;//pointer to given arraySetup
-				                         OutArrColors: PTR BYTE,
-				                         AnswerArr: PTR BYTE
-				     ;//-----------------------------------------------------------------------------
- 00000003  60			          pushad
 
- 00000004  BE 00000001		          mov esi, 1
- 00000009  8B 45 08		          mov eax, Arr
- 0000000C  8B 4D 0C		          mov ecx, OutArrColors
- 0000000F  8B 5D 10		          mov ebx, AnswerArr
+ 00000000			.data?
 
- 00000012			    again:
- 00000012  8B 11		          mov edx, [ecx]
- 00000014  0F B6 FA		          movzx edi, dl
-				                    
- 00000017  83 FF 01		          cmp edi, 1h
- 0000001A  74 0F		          jz b
+ 00000000  00000004 [		     arrayGame BYTE n dup(?)          ;//niz brojeva dodeljivanih u toku igre za random redosled kvadrata
+	    00
+	   ]
+ 00000004  00000004 [		     arraySetup BYTE n dup(?)          ;//inicijalna dodela brojeva bojama
+	    00
+	   ]
+ 00000008  00000004 [		     arrayOutColors BYTE n dup(?)
+	    00
+	   ]
+ 0000000C  00000004 [		     arrayOut BYTE n dup(? )
+	    00
+	   ]
 
- 0000001C  83 FF 02		          cmp edi, 2h
- 0000001F  74 10		          jz g
+ 00000000			     .code
+ 00000000			          main PROC
 
- 00000021  83 FF 04		          cmp edi, 4h
- 00000024  74 14		          jz r
+ 00000000			          again:
+				               INVOKE start_screen
+				               INVOKE random_array, OFFSET arrayGame, OFFSET arraySetup, assign_array_indicator
+				               INVOKE example_screen, OFFSET arraySetup, OFFSET arrayOutColors
+				               INVOKE get_answer, OFFSET arraySetup, OFFSET arrayOutColors, OFFSET arrayOut
+				               
+				               INVOKE ExitProcess, 0
 
- 00000026  83 FF 0E		          cmp edi, 0Eh
- 00000029  74 18		          jz y
-
- 0000002B			     b:
- 0000002B  8B 10		          mov edx, [eax]
- 0000002D  88 13		          mov [ebx], dl
- 0000002F  EB 1B		          jmp next
-
- 00000031			     g:
- 00000031  83 C0 01		          add eax, 1
- 00000034  8B 10		          mov edx, [eax]
- 00000036  88 13		          mov [ebx], dl
- 00000038  EB 12		          jmp next
-
- 0000003A			     r:
- 0000003A  83 C0 02		          add eax, 2
- 0000003D  8B 10		          mov edx, [eax]
- 0000003F  88 13		          mov [ebx], dl
- 00000041  EB 09		          jmp next
-
- 00000043			     y:
- 00000043  83 C0 03		          add eax, 3
- 00000046  8B 10		          mov edx, [eax]
- 00000048  88 13		          mov[ebx], dl
- 0000004A  EB 00		          jmp next
-
- 0000004C			     next:
-
- 0000004C  8B 45 08		          mov eax, Arr
- 0000004F  43			          inc ebx
- 00000050  41			          inc ecx
- 00000051  46			          inc esi
- 00000052  83 FE 05		          cmp esi, 5
- 00000055  75 BB		          jnz again
-
- 00000057  61			          popad
-				          ret
- 0000005C			     get_answer ENDP
-
-				END
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/28/20 20:53:23
-answer.asm						     Symbols 2 - 1
+ 00000044			     main ENDP
+				END main
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/28/20 21:06:56
+main.asm						     Symbols 2 - 1
 
 
 
@@ -218,10 +195,12 @@ Segments and Groups:
 
                 N a m e                 Size     Length   Align   Combine Class
 
+CONST  . . . . . . . . . . . . .	32 Bit	 00000000 Para	  Public  'CONST'	 ReadOnly
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000001 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000005C Para	  Public  'CODE'	
+_BSS . . . . . . . . . . . . . .	32 Bit	 00000010 Para	  Public  'BSS'  
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000007 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000044 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -331,16 +310,10 @@ WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 draw_squares . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 draw_square  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 example_screen . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-get_answer . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000005C Public STDCALL
-  Arr  . . . . . . . . . . . . .	DWord	 bp + 00000008
-  OutArrColors . . . . . . . . .	DWord	 bp + 0000000C
-  AnswerArr  . . . . . . . . . .	DWord	 bp + 00000010
-  again  . . . . . . . . . . . .	L Near	 00000012 _TEXT	
-  b  . . . . . . . . . . . . . .	L Near	 0000002B _TEXT	
-  g  . . . . . . . . . . . . . .	L Near	 00000031 _TEXT	
-  r  . . . . . . . . . . . . . .	L Near	 0000003A _TEXT	
-  y  . . . . . . . . . . . . . .	L Near	 00000043 _TEXT	
-  next . . . . . . . . . . . . .	L Near	 0000004C _TEXT	
+game_screen  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+get_answer . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000044 Public STDCALL
+  again  . . . . . . . . . . . .	L Near	 00000000 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 random_array . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -561,9 +534,15 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
+arrayGame  . . . . . . . . . . .	Byte	 00000000 _BSS	
+arrayOutColors . . . . . . . . .	Byte	 00000008 _BSS	
+arrayOut . . . . . . . . . . . .	Byte	 0000000C _BSS	
+arraySetup . . . . . . . . . . .	Byte	 00000004 _BSS	
+assign_array_indicator . . . . .	Byte	 00000000 _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
+colors . . . . . . . . . . . . .	Byte	 00000001 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
@@ -575,11 +554,12 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
+n  . . . . . . . . . . . . . . .	Number	 00000004h   
 red  . . . . . . . . . . . . . .	Number	 00000004h   
-temp . . . . . . . . . . . . . .	Byte	 00000000 _DATA	
+score  . . . . . . . . . . . . .	Byte	 00000006 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
 
-	   1 Warnings
+	   2 Warnings
 	   0 Errors
