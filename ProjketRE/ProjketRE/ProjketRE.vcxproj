@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <MASM Include="answer.asm" />
     <MASM Include="draw_squares.asm" />
     <MASM Include="main.asm" />
     <MASM Include="random_array.asm" />

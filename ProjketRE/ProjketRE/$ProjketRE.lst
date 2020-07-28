@@ -1,5 +1,5 @@
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 22:19:03
-pages.asm						     Page 1 - 1
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/28/20 21:06:56
+main.asm						     Page 1 - 1
 
 
 				INCLUDE Irvine32.inc
@@ -34,257 +34,77 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 			      C draw_square PROTO,
 			      C                     xposition: BYTE,
 			      C                     yposition: BYTE,
-			      C                     color: PTR BYTE
+			      C                     color: PTR BYTE,
+			      C                     k: PTR dword
 			      C 
 			      C draw_squares PROTO,
-			      C                     Arr: PTR BYTE
+			      C                     Arr: PTR BYTE,  ;//pointer to given arrayGame
+			      C                     OutArr: PTR BYTE
 			      C 
 			      C 
 			      C start_screen PROTO
 			      C 
 			      C 
 			      C example_screen PROTO,
-			      C                     Arr: PTR BYTE 
+			      C                     Arr: PTR BYTE,  ;//pointer to given arrayGame
+			      C                     OutArr: PTR BYTE
 			      C 
+			      C get_answer PROTO,
+			      C                          Arr: PTR BYTE,                ;//pointer to given arraySetup
+			      C                          OutArrColors: PTR BYTE,
+			      C                          AnswerArr: PTR BYTE
+			      C      
+			      C  game_screen PROTO,
+			      C                          Arr: PTR BYTE, ;//pointer to given arrayGame
+			      C                          OutArrColors: PTR BYTE
 			      C 
+
+				.386
+				.model flat, stdcall
+main.asm(5) : warning A4011:multiple .MODEL directives found : .MODEL ignored
+				.stack 4096
+				ExitProcess PROTO, dwExitCode:DWORD
+
+ 00000000			.const
+ = 00000004			     n = 4     ; //broj elemenata niza  
 
  00000000			.data
 
-
- 00000000 52 65 70 65 61	     winTitle BYTE "Repeat Pattern Game", 0
-	   74 20 50 61 74
-	   74 65 72 6E 20
-	   47 61 6D 65 00
-
- 00000014 57 65 6C 63 6F	     Welcome_message1 BYTE    "Welcome to the Repeat Pattern Game!", 0dh, 0ah,
-	   6D 65 20 74 6F
-	   20 74 68 65 20
-	   52 65 70 65 61
-	   74 20 50 61 74
-	   74 65 72 6E 20
-	   47 61 6D 65 21
-	   0D 0A 20 20 0D
-	   0A 52 75 6C 65
-	   73 3A 20 0D 0A
-	   31 2E 20 41 74
-	   20 74 68 65 20
-	   62 65 67 69 6E
-	   6E 69 6E 67 20
-	   6F 66 20 74 68
-	   65 20 67 61 6D
-	   65 2C 20 74 68
-	   65 72 65 20 61
-	   72 65 20 34 20
-	   73 71 75 61 72
-	   65 73 20 69 6E
-	   20 64 69 66 66
-	   65 72 65 6E 74
-	   20 63 6F 6C 6F
-	   72 73 20 61 6E
-	   64 20 65 61 63
-	   68 20 63 6F 6C
-	   6F 72 20 69 73
-	   20 61 73 73 69
-	   67 6E 65 64 20
-	   61 20 72 61 6E
-	   64 6F 6D 20 6E
-	   75 6D 62 65 72
-	   20 66 72 6F 6D
-	   20 31 20 74 6F
-	   20 34 0D 0A 00
-				                              "  ", 0dh, 0ah,
-				                              "Rules: ", 0dh, 0ah,
-				                              "1. At the beginning of the game, there are 4 squares in different colors and each color is assigned a random number from 1 to 4", 0dh, 0ah, 0
-				                       
- 000000C8 32 2E 20 59 6F	     Welcome_message2 BYTE    "2. You have to remember which number corresponds to which color.", 0dh, 0ah,
-	   75 20 68 61 76
-	   65 20 74 6F 20
-	   72 65 6D 65 6D
-	   62 65 72 20 77
-	   68 69 63 68 20
-	   6E 75 6D 62 65
-	   72 20 63 6F 72
-	   72 65 73 70 6F
-	   6E 64 73 20 74
-	   6F 20 77 68 69
-	   63 68 20 63 6F
-	   6C 6F 72 2E 0D
-	   0A 33 2E 20 4F
-	   72 64 65 72 20
-	   6F 66 20 63 6F
-	   6C 6F 72 65 64
-	   20 73 71 75 61
-	   72 65 73 20 63
-	   68 61 6E 67 65
-	   73 20 69 6E 20
-	   65 76 65 72 79
-	   20 74 75 72 6E
-	   20 61 6E 64 20
-	   79 6F 75 20 68
-	   61 76 65 20 74
-	   6F 20 77 72 69
-	   74 65 20 74 68
-	   65 20 63 6F 72
-	   72 65 73 70 6F
-	   6E 64 69 6E 67
-	   20 6E 75 6D 62
-	   65 72 73 20 69
-	   6E 20 74 68 65
-	   20 73 61 6D 65
-	   20 6F 72 64 65
-	   72 20 61 73 20
-	   67 69 76 65 6E
-	   20 73 71 75 61
-	   72 65 73 0D 0A
-	   00
-				                              "3. Order of colored squares changes in every turn and you have to write the corresponding numbers in the same order as given squares", 0dh, 0ah, 0
-
- 00000191 34 2E 20 41 72	     Welcome_message3 BYTE    "4. Array is given in the order: upper left -> upper right -> lower left -> lower right.", 0dh, 0ah,
-	   72 61 79 20 69
-	   73 20 67 69 76
-	   65 6E 20 69 6E
-	   20 74 68 65 20
-	   6F 72 64 65 72
-	   3A 20 75 70 70
-	   65 72 20 6C 65
-	   66 74 20 2D 3E
-	   20 75 70 70 65
-	   72 20 72 69 67
-	   68 74 20 2D 3E
-	   20 6C 6F 77 65
-	   72 20 6C 65 66
-	   74 20 2D 3E 20
-	   6C 6F 77 65 72
-	   20 72 69 67 68
-	   74 2E 0D 0A 35
-	   2E 20 45 61 63
-	   68 20 74 69 6D
-	   65 20 79 6F 75
-	   20 65 6E 74 65
-	   72 20 61 20 73
-	   75 63 63 65 73
-	   73 66 75 6C 20
-	   73 65 71 75 65
-	   6E 63 65 2C 20
-	   74 68 65 20 73
-	   71 75 61 72 65
-	   73 20 6F 72 64
-	   65 72 20 69 73
-	   20 72 65 67 65
-	   6E 65 72 61 74
-	   65 64 0D 0A 36
-	   2E 20 59 6F 75
-	   20 68 61 76 65
-	   20 36 30 20 73
-	   65 63 6F 6E 64
-	   73 20 74 6F 20
-	   67 65 74 20 61
-	   73 20 6D 61 6E
-	   79 20 63 6F 6D
-	   62 69 6E 61 74
-	   69 6F 6E 73 20
-	   61 73 20 70 6F
-	   73 73 69 62 6C
-	   65 0D 0A 20 20
-	   0D 0A 50 72 65
-	   73 73 20 61 6E
-	   79 20 6B 65 79
-	   20 74 6F 20 73
-	   74 61 72 74 20
-	   74 68 65 20 67
-	   61 6D 65 2E 2E
-	   2E 0D 0A 00
-				                              "5. Each time you enter a successful sequence, the squares order is regenerated", 0dh, 0ah,
-				                              "6. You have 60 seconds to get as many combinations as possible", 0dh, 0ah,
-				                              "  ", 0dh, 0ah,
-				                              "Press any key to start the game...", 0dh, 0ah, 0
-
- 000002A3 20 0D 0A 20 0D	     Color_message  BYTE      " ", 0dh, 0ah,
-	   0A 52 65 64 6F
-	   73 6C 65 64 20
-	   62 6F 6A 61 20
-	   70 6F 20 73 65
-	   6B 76 65 6E 63
-	   69 20 6A 65 3A
-	   20 50 4C 41 56
-	   41 20 5A 45 4C
-	   45 4E 41 20 43
-	   52 56 45 4E 41
-	   20 5A 55 54 41
-	   20 2D 3E 20 00
-				                              " ", 0dh, 0ah,
-				                              "Redosled boja po sekvenci je: PLAVA ZELENA CRVENA ZUTA -> ", 0
+ 00000000 00			     assign_array_indicator BYTE 0      ;//indikator pocetnog niza
+ 00000001 00 01 02 04 0E	     colors BYTE 0h, 1h, 2h, 4h, 0Eh
+ 00000006 00			     score BYTE 0
 
 
- 00000000			.code
-				;//---------------------------------------------------------------------------------------------------------------------
-				;//This function sets startup screen
- 00000000			     start_screen PROC
-				                   
- 00000000  52			          push edx
- 00000001  50			          push eax
+ 00000000			.data?
 
-				          INVOKE SetConsoleTitle, ADDR winTitle;// Naslov konzole
+ 00000000  00000004 [		     arrayGame BYTE n dup(?)          ;//niz brojeva dodeljivanih u toku igre za random redosled kvadrata
+	    00
+	   ]
+ 00000004  00000004 [		     arraySetup BYTE n dup(?)          ;//inicijalna dodela brojeva bojama
+	    00
+	   ]
+ 00000008  00000004 [		     arrayOutColors BYTE n dup(?)
+	    00
+	   ]
+ 0000000C  00000004 [		     arrayOut BYTE n dup(? )
+	    00
+	   ]
 
- 0000000C  E8 00000000 E	          call clrscr
- 00000011  B8 0000000F		          mov eax, 15
- 00000016  E8 00000000 E	          call SetTextColor
- 0000001B  BA 00000014 R	          mov edx, OFFSET Welcome_message1
- 00000020  E8 00000000 E	          call WriteString
- 00000025  BA 000000C8 R	          mov edx, OFFSET Welcome_message2
- 0000002A  E8 00000000 E	          call WriteString
- 0000002F  BA 00000191 R	          mov edx, OFFSET Welcome_message3
- 00000034  E8 00000000 E	          call WriteString
- 00000039  E8 00000000 E	          call readchar
- 0000003E  E8 00000000 E	          call clrscr
+ 00000000			     .code
+ 00000000			          main PROC
 
- 00000043  58			          pop eax
- 00000044  5A			          pop edx
- 00000045  C3			          ret
-
- 00000046			     start_screen ENDP
-
-				;//-----------------------------------------------------------------------------
-				;// 
-				;//
- 00000046			     example_screen PROC,
-				                         Arr: PTR BYTE       ;//pointer to given arrayGame
-				;//-----------------------------------------------------------------------------
-
- 00000049  52			               push edx
- 0000004A  50			               push eax
- 0000004B  51			               push ecx
- 0000004C  53			               push ebx
-
-				               INVOKE draw_squares, Arr
+ 00000000			          again:
+				               INVOKE start_screen
+				               INVOKE random_array, OFFSET arrayGame, OFFSET arraySetup, assign_array_indicator
+				               INVOKE example_screen, OFFSET arraySetup, OFFSET arrayOutColors
+				               INVOKE get_answer, OFFSET arraySetup, OFFSET arrayOutColors, OFFSET arrayOut
 				               
- 00000055  B8 0000000F		               mov eax, 15
- 0000005A  E8 00000000 E	               call SetTextColor
+				               INVOKE ExitProcess, 0
 
- 0000005F  BA 000002A3 R	               mov edx, OFFSET Color_message
- 00000064  E8 00000000 E	               call WriteString
-
- 00000069  B9 00000004		               mov ecx, 4
- 0000006E  8B 55 08		               mov edx, Arr
- 00000071			            L:
- 00000071  8B 1A		               mov ebx, [edx]
- 00000073  0F B6 C3		               movzx eax, bl
- 00000076  E8 00000000 E	               call WriteDec
- 0000007B  B0 20		               mov al, 20h
- 0000007D  E8 00000000 E	               call WriteChar
- 00000082  42			               inc edx
- 00000083  E2 EC		               loop L
-
- 00000085  5B			               pop ebx
- 00000086  59			               pop ecx
- 00000087  58			               pop eax
- 00000088  5A			               pop edx
-				               ret
-
- 0000008D			     example_screen ENDP
-				END
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/26/20 22:19:03
-pages.asm						     Symbols 2 - 1
+ 00000044			     main ENDP
+				END main
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/28/20 21:06:56
+main.asm						     Symbols 2 - 1
 
 
 
@@ -375,10 +195,12 @@ Segments and Groups:
 
                 N a m e                 Size     Length   Align   Combine Class
 
+CONST  . . . . . . . . . . . . .	32 Bit	 00000000 Para	  Public  'CONST'	 ReadOnly
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 000002E4 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000008D Para	  Public  'CODE'	
+_BSS . . . . . . . . . . . . . .	32 Bit	 00000010 Para	  Public  'BSS'  
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000007 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000044 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -487,13 +309,15 @@ WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 draw_squares . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 draw_square  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-example_screen . . . . . . . . .	P Near	 00000046 _TEXT	Length= 00000047 Public STDCALL
-  Arr  . . . . . . . . . . . . .	DWord	 bp + 00000008
-  L  . . . . . . . . . . . . . .	L Near	 00000071 _TEXT	
+example_screen . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+game_screen  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+get_answer . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000044 Public STDCALL
+  again  . . . . . . . . . . . .	L Near	 00000000 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 random_array . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-start_screen . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000046 Public STDCALL
+start_screen . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -515,7 +339,6 @@ CAPSLOCK_ON  . . . . . . . . . .	Number	 00000080h
 CREATE_ALWAYS  . . . . . . . . .	Number	 00000002h   
 CREATE_NEW . . . . . . . . . . .	Number	 00000001h   
 CTRL_MASK  . . . . . . . . . . .	Number	 0000000Ch   
-Color_message  . . . . . . . . .	Byte	 000002A3 _DATA	
 CreateFile . . . . . . . . . . .	Text   	 CreateFileA
 DO_NOT_SHARE . . . . . . . . . .	Number	 00000000h   
 ENABLE_ECHO_INPUT  . . . . . . .	Number	 00000004h   
@@ -709,14 +532,17 @@ VK_SUBTRACT  . . . . . . . . . .	Number	 0000006Dh
 VK_TAB . . . . . . . . . . . . .	Number	 00000009h   
 VK_UP  . . . . . . . . . . . . .	Number	 00000026h   
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
-Welcome_message1 . . . . . . . .	Byte	 00000014 _DATA	
-Welcome_message2 . . . . . . . .	Byte	 000000C8 _DATA	
-Welcome_message3 . . . . . . . .	Byte	 00000191 _DATA	
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
+arrayGame  . . . . . . . . . . .	Byte	 00000000 _BSS	
+arrayOutColors . . . . . . . . .	Byte	 00000008 _BSS	
+arrayOut . . . . . . . . . . . .	Byte	 0000000C _BSS	
+arraySetup . . . . . . . . . . .	Byte	 00000004 _BSS	
+assign_array_indicator . . . . .	Byte	 00000000 _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
+colors . . . . . . . . . . . . .	Byte	 00000001 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
@@ -728,11 +554,12 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
+n  . . . . . . . . . . . . . . .	Number	 00000004h   
 red  . . . . . . . . . . . . . .	Number	 00000004h   
+score  . . . . . . . . . . . . .	Byte	 00000006 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
-winTitle . . . . . . . . . . . .	Byte	 00000000 _DATA	
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
 
-	   1 Warnings
+	   2 Warnings
 	   0 Errors
