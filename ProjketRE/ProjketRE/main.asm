@@ -29,7 +29,7 @@ ExitProcess PROTO, dwExitCode:DWORD
           again:
                INVOKE start_screen
                INVOKE random_array, OFFSET arrayGame, OFFSET arraySetup, assign_array_indicator
-               INVOKE example_screen, OFFSET arraySetup, OFFSET arrayOutColors
+               INVOKE example_screen, OFFSET arrayGame, OFFSET arrayOutColors
                INVOKE get_answer, OFFSET arraySetup, OFFSET arrayOutColors, OFFSET arrayOut
                
                INVOKE ExitProcess, 0
