@@ -3,80 +3,81 @@ INCLUDE procedure.inc
 
 .data
 
-     ; //promenljive za dodelu brojeva bojama
-     red_num byte 0
-     blue_num byte 0
-     green_num byte 0
-     yellow_num byte 0
+     uno byte 0
+     due byte 0
+     tre byte 0
+     quattro byte 0
 
 .code
 
+;//-----------------------------------------------------------------------------------------------------------------
+;// This procedure generates a random four element array with different values [1,4]
 random_array PROC,
                     Arr: PTR BYTE,
-                    ArrSetup: PTR BYTE,
-                    indicator: BYTE
-
+                    ArrSetup : PTR BYTE,
+                    indicator : BYTE
+;//-----------------------------------------------------------------------------------------------------------------
           push ecx
           push esi
           push edi
           push eax
           push ebx
 
-          call randomize
+          call Randomize
 
-     variable_reset : ;//reset igre
-          mov red_num, 0
-          mov blue_num, 0
-          mov green_num, 0
-          mov yellow_num, 0
+     variable_reset : 
+          mov uno, 0
+          mov due, 0
+          mov tre, 0
+          mov quattro, 0
 
           mov ecx, 4
           mov esi, 0
           mov edi, Arr
           mov ebx, ArrSetup
 
-     assign:;//generisanje random niza
+     assign:                       ;//generating random value
           mov eax, 4
           call RandomRange
           add eax, 1
 
-          CMP al, red_num
-          JE assign
-          CMP al, blue_num
-          JE assign
-          CMP al, green_num
-          JE assign
-          CMP al, yellow_num
-          JE assign
+          cmp al, uno
+          je assign
+          cmp al, due
+          je assign
+          cmp al, tre
+          je assign
+          cmp al, quattro
+          je assign
 
-          CMP esi, 0
-          JE assign_first
-          CMP esi, 1
-          JE assign_second
-          CMP esi, 2
-          JE assign_third
-          CMP esi, 3
-          JE assign_fourth
-          CMP esi, 4
-          JE assign_end
+          cmp esi, 0
+          je assign_first
+          cmp esi, 1
+          je assign_second
+          cmp esi, 2
+          je assign_third
+          cmp esi, 3
+          je assign_fourth
+          cmp esi, 4
+          je assign_end
 
 
-     ;// Dodela vrednosti konstantama
+     ;// assign values to constants
 
      assign_first:
-          mov red_num, al
+          mov uno, al
           jmp assign_array
 
      assign_second :
-          mov blue_num, al
+          mov due, al
           jmp assign_array
 
      assign_third :
-          mov green_num, al
+          mov tre, al
           jmp assign_array
 
      assign_fourth :
-          mov yellow_num, al
+          mov quattro, al
           jmp assign_array
 
 
@@ -87,11 +88,11 @@ random_array PROC,
           jmp the_end
 
 
-     assign_array : ;// Upisivanje vrednosti u niz
+     assign_array :                ;// writing elements into array
 
           mov [edi], al
 
-          .if indicator == 0    ;// Proverava da li je u pitanju pocetna dodela vrednosti
+          .if indicator == 0    ;// Generates arraySetup at the begining of the game
                mov[ebx], al
                inc ebx
           .endif
@@ -104,7 +105,6 @@ random_array PROC,
           cmp ecx, 0
           jnz assign
 
-
      the_end:
 
           pop ebx
@@ -115,4 +115,5 @@ random_array PROC,
           ret
 
 random_array ENDP
+
 END
