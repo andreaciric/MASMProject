@@ -3,66 +3,66 @@ INCLUDE procedure.inc
 
 .data
 
-
-     winTitle BYTE "Repeat Pattern Game", 0
      
-     indicator BYTE 0
-     arr_indicator BYTE 0
+     indicator      BYTE 0
+     arr_indicator  BYTE 0
 
-     Welcome_message1 BYTE    "Welcome to the Repeat Pattern Game!", 0dh, 0ah,
-                              "  ", 0dh, 0ah,
-                              "Rules: ", 0dh, 0ah,
-                              "1. At the beginning of the game, there are 4 squares in different colors and each color is assigned a random number from 1 to 4", 0dh, 0ah, 0
+     winTitle            BYTE      "Repeat Pattern Game", 0
+
+     Welcome_message1    BYTE      "Welcome to the Repeat Pattern Game!", 0dh, 0ah,
+                                   "  ", 0dh, 0ah,
+                                   "Rules: ", 0dh, 0ah,
+                                   "1. At the beginning of the game, there are 4 squares in different colors and each color is assigned a random number from 1 to 4", 0dh, 0ah, 0
                        
-     Welcome_message2 BYTE    "2. You have to remember which number corresponds to which color.", 0dh, 0ah,
-                              "3. Order of colored squares changes in every turn and you have to write the corresponding numbers in the same order as given squares", 0dh, 0ah, 0
+     Welcome_message2    BYTE      "2. You have to remember which number corresponds to which color.", 0dh, 0ah,
+                                   "3. Order of colored squares changes in every turn and you have to write the corresponding numbers in the same order as given squares", 0dh, 0ah, 
+                                   "4. Array is given in the order: upper left -> upper right -> lower left -> lower right.", 0dh, 0ah, 0
 
-     Welcome_message3 BYTE    "4. Array is given in the order: upper left -> upper right -> lower left -> lower right.", 0dh, 0ah,
-                              "5. Each time you enter a successful sequence, the squares order is regenerated", 0dh, 0ah,
-                              "6. You have 60 seconds to get as many combinations as possible", 0dh, 0ah,
-                              "  ", 0dh, 0ah,
-                              "Press any key to start the game...", 0dh, 0ah, 0
+     Welcome_message3    BYTE      "5. Each time you enter a successful sequence, the squares order is regenerated", 0dh, 0ah,
+                                   "6. You have 60 seconds to get as many combinations as possible", 0dh, 0ah,
+                                   "  ", 0dh, 0ah,
+                                   "Press any key to start the game...", 0dh, 0ah, 0
 
-     Color_message  BYTE      " ", 0dh, 0ah,
-                              " ", 0dh, 0ah,
-                              "The order of colors in sequence is: BLUE GREEN RED YELLOW -> ", 0
+     Color_message       BYTE      " ", 0dh, 0ah,
+                                   " ", 0dh, 0ah,
+                                   "The order of colors in sequence is: BLUE GREEN RED YELLOW -> ", 0
 
-     Blank_message  BYTE      " ", 0dh, 0ah,
-                              " ", 0dh, 0ah,0
+     Blank_message       BYTE      " ", 0dh, 0ah,
+                                   " ", 0dh, 0ah,0
 
-     Test_message   BYTE      "THIS IS THE TEST ROUND!", 0dh, 0ah,
-                              " ", 0dh, 0ah, 0
+     Test_message        BYTE      "THIS IS THE TEST ROUND!", 0dh, 0ah,
+                                   " ", 0dh, 0ah, 0
 
-     Answer_message   BYTE    "Write your answer: ", 0dh, 0ah, 0
+     Answer_message      BYTE      "Write your answer: ", 0dh, 0ah, 0
 
-     TryAgain_message   BYTE  "Try again!", 0dh, 0ah, 0
+     TryAgain_message    BYTE      "Try again!", 0dh, 0ah, 0
 
-     Start_message   BYTE     " ", 0dh, 0ah,
-                              "WELL DONE!", 0dh, 0ah,
-                              "Press any key to start the game...", 0dh, 0ah, 0
-     EndGame_message BYTE     " ", 0dh, 0ah,
-                              "Wrong Answer!", 0dh, 0ah, 0
-
-     TimeOut_message BYTE     " ", 0dh, 0ah,
-                              "Time's up! ", 0dh, 0ah,
-                              "Your score is: ", 0dh, 0ah, 0
-
+     Start_message       BYTE      " ", 0dh, 0ah,
+                                   "WELL DONE!", 0dh, 0ah,
+                                   "Press any key to start the game...", 0dh, 0ah, 0
      
+     EndGame_message     BYTE      " ", 0dh, 0ah,
+                                   "Wrong Answer!", 0dh, 0ah, 0
+
+     TimeOut_message     BYTE      " ", 0dh, 0ah,
+                                   "Time's up! ", 0dh, 0ah,
+                                   "Your score is: ", 0dh, 0ah, 0   
 
 .data?
-     arrayOut BYTE 4 dup (?)
-     time dword ?
-     arraySetup BYTE 4 dup(?)  ;//inicijalna dodela brojeva bojama
+     arrayOut       BYTE      4    dup (?)
+     time           DWORD     ?
+     arraySetup     BYTE      4    dup (?)  
      
 .code
 ;//---------------------------------------------------------------------------------------------------------------------
-;//This function sets startup screen
+;//This function sets startup screen with game instructions
+
      start_screen PROC
                    
           push edx
           push eax
 
-          INVOKE SetConsoleTitle, ADDR winTitle;// Naslov konzole
+          INVOKE SetConsoleTitle, ADDR WinTitle
 
           call clrscr
           mov eax, 15
@@ -82,15 +82,15 @@ INCLUDE procedure.inc
 
      start_screen ENDP
 
-;//-----------------------------------------------------------------------------
-;// 
-;//
+;//---------------------------------------------------------------------------------------------------------------------
+;//This function sets example screen
+
      example_screen PROC,
-                         Arr: PTR BYTE, ;//pointer to given arrayGame
+                         Arr: PTR BYTE, 
                          OutArrColors: PTR BYTE,
                          ArrSetup : PTR BYTE,
                          assign_array_indicator: BYTE
-;//-----------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------
 
                push edx
                push eax
@@ -130,6 +130,7 @@ INCLUDE procedure.inc
                call WriteString
 
                INVOKE true_answer, ArrSetup, OutArrColors, OFFSET arrayOut
+
           again:          
                INVOKE get_answer, OFFSET arrayOut, OFFSET indicator
                movzx edi, indicator
@@ -143,7 +144,7 @@ INCLUDE procedure.inc
 
                mov edx, OFFSET Start_message
                call WriteString
-               call readchar
+               call ReadChar
                call clrscr
 
                pop ebx
@@ -154,12 +155,15 @@ INCLUDE procedure.inc
 
      example_screen ENDP
 
+;//---------------------------------------------------------------------------------------------------------------------
+;//This function sets game screen
+
      game_screen PROC,
-                         Arr: PTR BYTE, ;//pointer to given arrayGame
+                         Arr: PTR BYTE, 
                          OutArrColors: PTR BYTE,
                          ArrSetup : PTR BYTE,
                          score: DWORD
-               ;//-----------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------
 
           push edx
           push eax

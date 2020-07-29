@@ -6,11 +6,14 @@ INCLUDE procedure.inc
 
 .code
 
+;//--------------------------------------------------------------------------------------------------
+;//This procedure generates a true answer (AnswerArr)
+
     true_answer PROC,
-                         Arr: PTR BYTE,                ;//pointer to given arraySetup
+                         Arr: PTR BYTE,              
                          OutArrColors: PTR BYTE,
                          AnswerArr: PTR BYTE
-     ;//-----------------------------------------------------------------------------
+;//--------------------------------------------------------------------------------------------------
           pushad
 
           mov esi, 1
@@ -21,7 +24,9 @@ INCLUDE procedure.inc
     again:
           mov edx, [ecx]
           movzx edi, dl
-                    
+
+          ;//determines what color it is
+          
           cmp edi, 1h
           jz b
 
@@ -33,6 +38,8 @@ INCLUDE procedure.inc
 
           cmp edi, 0Eh
           jz y
+
+          ;//determines which number is assigned to that color
 
      b:
           mov edx, [eax]
@@ -70,10 +77,12 @@ INCLUDE procedure.inc
           ret
      true_answer ENDP
 
+;//--------------------------------------------------------------------------------------------------
+;//This procedure reads input and compares it with real (true) answers
      get_answer PROC,
-                         Arr: PTR BYTE, ;//pointer to given arraySetup
+                         Arr: PTR BYTE,
                          indicator: PTR BYTE
-     ;//-----------------------------------------------------------------------------
+;//--------------------------------------------------------------------------------------------------
 
           pushad
 
@@ -85,14 +94,14 @@ INCLUDE procedure.inc
           movzx edx, cl
           call ReadInt
           cmp eax, edx
-          JNE end_false
+          jne end_false
           mov ecx, indicator
           mov edi, 1
           mov [ecx], edi
           inc ebx
           inc esi
           cmp esi, 5
-          JNE again
+          jne again
           jmp the_end
 
      end_false:
@@ -105,4 +114,5 @@ INCLUDE procedure.inc
           popad
           ret
      get_answer ENDP
+
 END

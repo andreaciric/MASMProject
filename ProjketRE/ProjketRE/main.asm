@@ -7,41 +7,40 @@ INCLUDE procedure.inc
 ExitProcess PROTO, dwExitCode:DWORD
 
 .const
-     n = 4     ; //broj elemenata niza  
+     n = 4     ; //number of elements in array  
 
 .data
 
-     assign_array_indicator BYTE 0      ;//indikator pocetnog niza
-     colors BYTE 0h, 1h, 2h, 4h, 0Eh
-     score DWORD 0
-
-     PlayAgain_message BYTE   "Do you want to play again?", 0
+     assign_array_indicator   BYTE      0      
+     score                    DWORD     0
+     PlayAgain_message        BYTE      "Do you want to play again?", 0
 
 
 .data?
 
-     arrayGame BYTE n dup(?)          ;//niz brojeva dodeljivanih u toku igre za random redosled kvadrata
-     arraySetup BYTE n dup(? );//inicijalna dodela brojeva bojama
-     arrayOutColors BYTE n dup(?)
-     arrayOut BYTE n dup(? )
+     arrayGame      BYTE n dup(?)       ;//array of numbers generated during the game
+     arraySetup     BYTE n dup(?)       ;//numbers assigned to colors
+     arrayOutColors BYTE n dup(?)       ;//order of colors on screen
+     arrayOut       BYTE n dup(?)       ;//true answer array
 
-     .code
-          main PROC
+.code
+    main PROC
 
-               INVOKE start_screen
-          again:
-               INVOKE example_screen, OFFSET arrayGame, OFFSET arrayOutColors, OFFSET arraySetup, assign_array_indicator
-               INVOKE game_screen, OFFSET arrayGame, OFFSET arrayOutColors, OFFSET arraySetup, score
-               
-               mov ebx, 0
-               mov edx, OFFSET PlayAgain_message
-               mov assign_array_indicator, 0
-               mov score, 0
-               call MsgBoxAsk
-               cmp eax, IDNO
-               jne again
+          INVOKE start_screen
+     again:
+          INVOKE example_screen, OFFSET arrayGame, OFFSET arrayOutColors, OFFSET arraySetup, assign_array_indicator
+          INVOKE game_screen, OFFSET arrayGame, OFFSET arrayOutColors, OFFSET arraySetup, score
 
-               INVOKE ExitProcess, 0
+          ;// play again?
+          mov ebx, 0
+          mov edx, OFFSET PlayAgain_message
+          mov assign_array_indicator, 0
+          mov score, 0
+          call MsgBoxAsk
+          cmp eax, IDNO
+          jne again
+
+          INVOKE ExitProcess, 0
 
      main ENDP
 END main

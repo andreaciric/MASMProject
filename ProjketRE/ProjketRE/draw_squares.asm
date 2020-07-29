@@ -16,7 +16,7 @@ p dword 0
                          xpos: BYTE,         
                          ypos: BYTE,
                          color: PTR BYTE,
-                         k:  PTR dword
+                         k:  PTR DWORD
 
 ;//---------------------------------------------------------------------------
           push edx
@@ -43,10 +43,10 @@ p dword 0
           ;//drawing 0DBh objects 
           .WHILE(esi > 0)
                .WHILE(edi > 0)
-               call gotoxy
-               call WriteChar
-               dec edi
-               inc dh
+                    call Gotoxy
+                    call WriteChar
+                    dec edi
+                    inc dh
                .ENDW
                mov dh, xpos
                mov edi, 8
@@ -62,14 +62,13 @@ p dword 0
                ret
      draw_square ENDP
 
-;//-----------------------------------------------------------------------------
-;//This procedure sets parameters for all four squares 
-;//and calls draw_square procedure for each square
+;//----------------------------------------------------------------------------------------------------------
+;//This procedure sets parameters for all four squares  and calls draw_square procedure for each square
   
      draw_squares PROC,
-                         Arr: PTR BYTE, ;//pointer to given arrayGame
+                         Arr: PTR BYTE,
                          OutArrColors: PTR BYTE
-;//-----------------------------------------------------------------------------
+;//----------------------------------------------------------------------------------------------------------
                pushad
 
                mov edi, 0
@@ -124,12 +123,12 @@ p dword 0
 
           variables_set :
                INVOKE draw_square, xposition, yposition, eax, OFFSET p
-               mov eax, [p]
+               mov eax, [p]                  ;// saves the order of colors on the screen
                mov [edx], eax
                inc edx
                inc ebx
-               CMP edi, 4
-               JNE draw
+               cmp edi, 4
+               jne draw
 
                popad
           ret
