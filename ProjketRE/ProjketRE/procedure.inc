@@ -23,13 +23,21 @@ start_screen PROTO
 
 example_screen PROTO,
                     Arr: PTR BYTE,  ;//pointer to given arrayGame
-                    OutArr: PTR BYTE
+                    OutArrColors: PTR BYTE,
+                    ArrSetup : PTR BYTE,
+                    assign_array_indicator: BYTE
 
-get_answer PROTO,
+true_answer PROTO,
                          Arr: PTR BYTE,                ;//pointer to given arraySetup
                          OutArrColors: PTR BYTE,
                          AnswerArr: PTR BYTE
      
- game_screen PROTO,
+game_screen PROTO,
                          Arr: PTR BYTE, ;//pointer to given arrayGame
-                         OutArrColors: PTR BYTE
+                         OutArrColors: PTR BYTE,
+                         ArrSetup : PTR BYTE,
+                         score: DWORD
+
+get_answer PROTO,
+                         Arr: PTR BYTE, ;//pointer to given arraySetup
+                         indicator: PTR BYTE

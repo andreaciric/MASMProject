@@ -92,7 +92,7 @@ random_array PROC,
           mov [edi], al
 
           .if indicator == 0    ;// Proverava da li je u pitanju pocetna dodela vrednosti
-          mov[ebx], al
+               mov[ebx], al
                inc ebx
           .endif
 

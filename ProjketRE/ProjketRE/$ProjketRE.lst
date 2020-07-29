@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/28/20 21:10:22
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/29/20 20:05:25
 pages.asm						     Page 1 - 1
 
 
@@ -47,16 +47,24 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 			      C 
 			      C example_screen PROTO,
 			      C                     Arr: PTR BYTE,  ;//pointer to given arrayGame
-			      C                     OutArr: PTR BYTE
+			      C                     OutArrColors: PTR BYTE,
+			      C                     ArrSetup : PTR BYTE,
+			      C                     assign_array_indicator: BYTE
 			      C 
-			      C get_answer PROTO,
+			      C true_answer PROTO,
 			      C                          Arr: PTR BYTE,                ;//pointer to given arraySetup
 			      C                          OutArrColors: PTR BYTE,
 			      C                          AnswerArr: PTR BYTE
 			      C      
-			      C  game_screen PROTO,
+			      C game_screen PROTO,
 			      C                          Arr: PTR BYTE, ;//pointer to given arrayGame
-			      C                          OutArrColors: PTR BYTE
+			      C                          OutArrColors: PTR BYTE,
+			      C                          ArrSetup : PTR BYTE,
+			      C                          score: DWORD
+			      C 
+			      C get_answer PROTO,
+			      C                          Arr: PTR BYTE, ;//pointer to given arraySetup
+			      C                          indicator: PTR BYTE
 			      C 
 
  00000000			.data
@@ -66,8 +74,11 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 	   74 20 50 61 74
 	   74 65 72 6E 20
 	   47 61 6D 65 00
+				     
+ 00000014 00			     indicator BYTE 0
+ 00000015 00			     arr_indicator BYTE 0
 
- 00000014 57 65 6C 63 6F	     Welcome_message1 BYTE    "Welcome to the Repeat Pattern Game!", 0dh, 0ah,
+ 00000016 57 65 6C 63 6F	     Welcome_message1 BYTE    "Welcome to the Repeat Pattern Game!", 0dh, 0ah,
 	   6D 65 20 74 6F
 	   20 74 68 65 20
 	   52 65 70 65 61
@@ -107,7 +118,7 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 				                              "Rules: ", 0dh, 0ah,
 				                              "1. At the beginning of the game, there are 4 squares in different colors and each color is assigned a random number from 1 to 4", 0dh, 0ah, 0
 				                       
- 000000C8 32 2E 20 59 6F	     Welcome_message2 BYTE    "2. You have to remember which number corresponds to which color.", 0dh, 0ah,
+ 000000CA 32 2E 20 59 6F	     Welcome_message2 BYTE    "2. You have to remember which number corresponds to which color.", 0dh, 0ah,
 	   75 20 68 61 76
 	   65 20 74 6F 20
 	   72 65 6D 65 6D
@@ -150,7 +161,7 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 	   00
 				                              "3. Order of colored squares changes in every turn and you have to write the corresponding numbers in the same order as given squares", 0dh, 0ah, 0
 
- 00000191 34 2E 20 41 72	     Welcome_message3 BYTE    "4. Array is given in the order: upper left -> upper right -> lower left -> lower right.", 0dh, 0ah,
+ 00000193 34 2E 20 41 72	     Welcome_message3 BYTE    "4. Array is given in the order: upper left -> upper right -> lower left -> lower right.", 0dh, 0ah,
 	   72 61 79 20 69
 	   73 20 67 69 76
 	   65 6E 20 69 6E
@@ -210,25 +221,85 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 				                              "  ", 0dh, 0ah,
 				                              "Press any key to start the game...", 0dh, 0ah, 0
 
- 000002A3 20 0D 0A 20 0D	     Color_message  BYTE      " ", 0dh, 0ah,
-	   0A 52 65 64 6F
-	   73 6C 65 64 20
-	   62 6F 6A 61 20
-	   70 6F 20 73 65
-	   6B 76 65 6E 63
-	   69 20 6A 65 3A
-	   20 50 4C 41 56
-	   41 20 5A 45 4C
-	   45 4E 41 20 43
-	   52 56 45 4E 41
-	   20 5A 55 54 41
-	   20 2D 3E 20 00
+ 000002A5 20 0D 0A 20 0D	     Color_message  BYTE      " ", 0dh, 0ah,
+	   0A 54 68 65 20
+	   6F 72 64 65 72
+	   20 6F 66 20 63
+	   6F 6C 6F 72 73
+	   20 69 6E 20 73
+	   65 71 75 65 6E
+	   63 65 20 69 73
+	   3A 20 42 4C 55
+	   45 20 47 52 45
+	   45 4E 20 52 45
+	   44 20 59 45 4C
+	   4C 4F 57 20 2D
+	   3E 20 00
 				                              " ", 0dh, 0ah,
-				                              "Redosled boja po sekvenci je: PLAVA ZELENA CRVENA ZUTA -> ", 0
+				                              "The order of colors in sequence is: BLUE GREEN RED YELLOW -> ", 0
 
- 000002E4 20 0D 0A 20 0D	     Blank_message  BYTE      " ", 0dh, 0ah,
+ 000002E9 20 0D 0A 20 0D	     Blank_message  BYTE      " ", 0dh, 0ah,
 	   0A 00
 				                              " ", 0dh, 0ah,0
+
+ 000002F0 54 48 49 53 20	     Test_message   BYTE      "THIS IS THE TEST ROUND!", 0dh, 0ah,
+	   49 53 20 54 48
+	   45 20 54 45 53
+	   54 20 52 4F 55
+	   4E 44 21 0D 0A
+	   20 0D 0A 00
+				                              " ", 0dh, 0ah, 0
+
+ 0000030D 57 72 69 74 65	     Answer_message   BYTE    "Write your answer: ", 0dh, 0ah, 0
+	   20 79 6F 75 72
+	   20 61 6E 73 77
+	   65 72 3A 20 0D
+	   0A 00
+
+ 00000323 54 72 79 20 61	     TryAgain_message   BYTE  "Try again!", 0dh, 0ah, 0
+	   67 61 69 6E 21
+	   0D 0A 00
+
+ 00000330 20 0D 0A 57 45	     Start_message   BYTE     " ", 0dh, 0ah,
+	   4C 4C 20 44 4F
+	   4E 45 21 0D 0A
+	   50 72 65 73 73
+	   20 61 6E 79 20
+	   6B 65 79 20 74
+	   6F 20 73 74 61
+	   72 74 20 74 68
+	   65 20 67 61 6D
+	   65 2E 2E 2E 0D
+	   0A 00
+				                              "WELL DONE!", 0dh, 0ah,
+				                              "Press any key to start the game...", 0dh, 0ah, 0
+ 00000364 20 0D 0A 57 72	     EndGame_message BYTE     " ", 0dh, 0ah,
+	   6F 6E 67 20 41
+	   6E 73 77 65 72
+	   21 0D 0A 00
+				                              "Wrong Answer!", 0dh, 0ah, 0
+
+ 00000377 20 0D 0A 54 69	     TimeOut_message BYTE     " ", 0dh, 0ah,
+	   6D 65 27 73 20
+	   75 70 21 20 0D
+	   0A 59 6F 75 72
+	   20 73 63 6F 72
+	   65 20 69 73 3A
+	   20 0D 0A 00
+				                              "Time's up! ", 0dh, 0ah,
+				                              "Your score is: ", 0dh, 0ah, 0
+
+				     
+
+ 00000000			.data?
+ 00000000  00000004 [		     arrayOut BYTE 4 dup (?)
+	    00
+	   ]
+ 00000004 00000000		     time dword ?
+ 00000008  00000004 [		     arraySetup BYTE 4 dup(?)  ;//inicijalna dodela brojeva bojama
+	    00
+	   ]
+				     
  00000000			.code
 				;//---------------------------------------------------------------------------------------------------------------------
 				;//This function sets startup screen
@@ -242,11 +313,11 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
  0000000C  E8 00000000 E	          call clrscr
  00000011  B8 0000000F		          mov eax, 15
  00000016  E8 00000000 E	          call SetTextColor
- 0000001B  BA 00000014 R	          mov edx, OFFSET Welcome_message1
+ 0000001B  BA 00000016 R	          mov edx, OFFSET Welcome_message1
  00000020  E8 00000000 E	          call WriteString
- 00000025  BA 000000C8 R	          mov edx, OFFSET Welcome_message2
+ 00000025  BA 000000CA R	          mov edx, OFFSET Welcome_message2
  0000002A  E8 00000000 E	          call WriteString
- 0000002F  BA 00000191 R	          mov edx, OFFSET Welcome_message3
+ 0000002F  BA 00000193 R	          mov edx, OFFSET Welcome_message3
  00000034  E8 00000000 E	          call WriteString
  00000039  E8 00000000 E	          call readchar
  0000003E  E8 00000000 E	          call clrscr
@@ -262,7 +333,9 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
 				;//
  00000046			     example_screen PROC,
 				                         Arr: PTR BYTE, ;//pointer to given arrayGame
-				                         OutArrColors: PTR BYTE
+				                         OutArrColors: PTR BYTE,
+				                         ArrSetup : PTR BYTE,
+				                         assign_array_indicator: BYTE
 				;//-----------------------------------------------------------------------------
 
  00000049  52			               push edx
@@ -270,60 +343,129 @@ procedure.inc(2) : warning A4011:multiple .MODEL directives found : .MODEL ignor
  0000004B  51			               push ecx
  0000004C  53			               push ebx
 
+ 0000004D  E8 00000000 E	               call clrscr
+				               
+				               INVOKE random_array, Arr, ArrSetup, assign_array_indicator
+ 00000061  C6 45 14 01		               mov assign_array_indicator, 1
 				               INVOKE draw_squares, Arr, OutArrColors
 				               
- 00000058  B8 0000000F		               mov eax, 15
- 0000005D  E8 00000000 E	               call SetTextColor
+ 00000070  B8 0000000F		               mov eax, 15
+ 00000075  E8 00000000 E	               call SetTextColor
 
- 00000062  BA 000002A3 R	               mov edx, OFFSET Color_message
- 00000067  E8 00000000 E	               call WriteString
+ 0000007A  BA 000002A5 R	               mov edx, OFFSET Color_message
+ 0000007F  E8 00000000 E	               call WriteString
 
- 0000006C  B9 00000004		               mov ecx, 4
- 00000071  8B 55 08		               mov edx, Arr
- 00000074			            L:
- 00000074  8B 1A		               mov ebx, [edx]
- 00000076  0F B6 C3		               movzx eax, bl
- 00000079  E8 00000000 E	               call WriteDec
- 0000007E  B0 20		               mov al, 20h
- 00000080  E8 00000000 E	               call WriteChar
- 00000085  42			               inc edx
- 00000086  E2 EC		               loop L
+ 00000084  B9 00000004		               mov ecx, 4
+ 00000089  8B 55 08		               mov edx, Arr
+ 0000008C			            L:
+ 0000008C  8B 1A		               mov ebx, [edx]
+ 0000008E  0F B6 C3		               movzx eax, bl
+ 00000091  E8 00000000 E	               call WriteDec
+ 00000096  B0 20		               mov al, 20h
+ 00000098  E8 00000000 E	               call WriteChar
+ 0000009D  42			               inc edx
+ 0000009E  E2 EC		               loop L
 
- 00000088  BA 000002E4 R	               mov edx, OFFSET Blank_message
- 0000008D  E8 00000000 E	               call WriteString
+ 000000A0  BA 000002E9 R	               mov edx, OFFSET Blank_message
+ 000000A5  E8 00000000 E	               call WriteString
 
- 00000092  5B			               pop ebx
- 00000093  59			               pop ecx
- 00000094  58			               pop eax
- 00000095  5A			               pop edx
+ 000000AA  BA 000002F0 R	               mov edx, OFFSET Test_message
+ 000000AF  E8 00000000 E	               call WriteString
+
+ 000000B4  BA 0000030D R	               mov edx, OFFSET Answer_message
+ 000000B9  E8 00000000 E	               call WriteString
+
+				               INVOKE true_answer, ArrSetup, OutArrColors, OFFSET arrayOut
+ 000000CE			          again:          
+				               INVOKE get_answer, OFFSET arrayOut, OFFSET indicator
+ 000000DD  0F B6 3D		               movzx edi, indicator
+	   00000014 R
+				               .if ( edi == 0)
+ 000000E8  BA 00000323 R	                    mov edx, OFFSET TryAgain_message
+ 000000ED  E8 00000000 E	                    call WriteString
+ 000000F2  BA 0000030D R	                    mov edx, OFFSET Answer_message
+ 000000F7  E8 00000000 E	                    call WriteString
+ 000000FC  EB D0		                    jmp again
+				               .endif
+
+ 000000FE  BA 00000330 R	               mov edx, OFFSET Start_message
+ 00000103  E8 00000000 E	               call WriteString
+ 00000108  E8 00000000 E	               call readchar
+ 0000010D  E8 00000000 E	               call clrscr
+
+ 00000112  5B			               pop ebx
+ 00000113  59			               pop ecx
+ 00000114  58			               pop eax
+ 00000115  5A			               pop edx
 				               ret
 
- 0000009A			     example_screen ENDP
+ 0000011A			     example_screen ENDP
 
- 0000009A			     game_screen PROC,
+ 0000011A			     game_screen PROC,
 				                         Arr: PTR BYTE, ;//pointer to given arrayGame
-				                         OutArrColors: PTR BYTE
+				                         OutArrColors: PTR BYTE,
+				                         ArrSetup : PTR BYTE,
+				                         score: DWORD
 				               ;//-----------------------------------------------------------------------------
 
- 0000009D  52			          push edx
- 0000009E  50			          push eax
-				          
+ 0000011D  52			          push edx
+ 0000011E  50			          push eax
+ 0000011F  53			          push ebx
 
+ 00000120  E8 00000000 E	          call GetMseconds
+ 00000125  A3 00000004 R	          mov time, eax
+
+ 0000012A			 again:
+ 0000012A  E8 00000000 E	          call clrscr
+				          INVOKE random_array, Arr, ArrSetup, 1
 				          INVOKE draw_squares, Arr, OutArrColors
 
- 000000AA  B8 0000000F		          mov eax, 15
- 000000AF  E8 00000000 E	          call SetTextColor
+ 00000147  B8 0000000F		          mov eax, 15
+ 0000014C  E8 00000000 E	          call SetTextColor
 
- 000000B4  BA 000002E4 R	          mov edx, OFFSET Blank_message
- 000000B9  E8 00000000 E	          call WriteString
+ 00000151  BA 000002E9 R	          mov edx, OFFSET Blank_message
+ 00000156  E8 00000000 E	          call WriteString
+
+ 0000015B  BA 0000030D R	          mov edx, OFFSET Answer_message
+ 00000160  E8 00000000 E	          call WriteString
+
+				          INVOKE true_answer, ArrSetup, OutArrColors, OFFSET arrayOut
+
+				          INVOKE get_answer, OFFSET arrayOut, OFFSET indicator
+ 00000184  0F B6 3D		          movzx edi, indicator
+	   00000014 R
+				          .if (edi == 0)
+ 0000018F  BA 00000364 R	               mov edx, OFFSET EndGame_message
+ 00000194  E8 00000000 E	               call WriteString
+ 00000199  EB 38		               jmp the_end
+				          .endif
+				          
+ 0000019B  E8 00000000 E	          call GetMseconds
+ 000001A0  2B 05 00000004 R	          sub eax, time
+				          .if (eax < 60000)
+ 000001AD  FF 45 14		               inc score
+ 000001B0  E8 00000000 E	               call clrscr
+ 000001B5  E9 FFFFFF70		               jmp again
+				          .else
+ 000001BC  E8 00000000 E	               call clrscr
+ 000001C1  BA 00000377 R	               mov edx, OFFSET TimeOut_message
+ 000001C6  E8 00000000 E	               call WriteString
+ 000001CB  8B 45 14		               mov eax, score
+ 000001CE  E8 00000000 E	               call WriteDec
+
+				          .endif
+
 				         
- 000000BE  58			          pop eax
- 000000BF  5A			          pop edx
+ 000001D3			     the_end:
+ 000001D3  5B			          pop ebx
+ 000001D4  58			          pop eax
+ 000001D5  5A			          pop edx
 				          ret
 
- 000000C4			      game_screen ENDP
+ 000001DA			      game_screen ENDP
+
 				END
-Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/28/20 21:10:22
+Microsoft (R) Macro Assembler Version 14.16.27042.0	    07/29/20 20:05:25
 pages.asm						     Symbols 2 - 1
 
 
@@ -417,8 +559,9 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 000002EB Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000C4 Para	  Public  'CODE'	
+_BSS . . . . . . . . . . . . . .	32 Bit	 0000000C Para	  Public  'BSS'  
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000399 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000001DA Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -527,18 +670,26 @@ WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 draw_squares . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 draw_square  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-example_screen . . . . . . . . .	P Near	 00000046 _TEXT	Length= 00000054 Public STDCALL
+example_screen . . . . . . . . .	P Near	 00000046 _TEXT	Length= 000000D4 Public STDCALL
   Arr  . . . . . . . . . . . . .	DWord	 bp + 00000008
   OutArrColors . . . . . . . . .	DWord	 bp + 0000000C
-  L  . . . . . . . . . . . . . .	L Near	 00000074 _TEXT	
-game_screen  . . . . . . . . . .	P Near	 0000009A _TEXT	Length= 0000002A Public STDCALL
+  ArrSetup . . . . . . . . . . .	DWord	 bp + 00000010
+  assign_array_indicator . . . .	Byte	 bp + 00000014
+  L  . . . . . . . . . . . . . .	L Near	 0000008C _TEXT	
+  again  . . . . . . . . . . . .	L Near	 000000CE _TEXT	
+game_screen  . . . . . . . . . .	P Near	 0000011A _TEXT	Length= 000000C0 Public STDCALL
   Arr  . . . . . . . . . . . . .	DWord	 bp + 00000008
   OutArrColors . . . . . . . . .	DWord	 bp + 0000000C
+  ArrSetup . . . . . . . . . . .	DWord	 bp + 00000010
+  score  . . . . . . . . . . . .	DWord	 bp + 00000014
+  again  . . . . . . . . . . . .	L Near	 0000012A _TEXT	
+  the_end  . . . . . . . . . . .	L Near	 000001D3 _TEXT	
 get_answer . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 random_array . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 start_screen . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000046 Public STDCALL
+true_answer  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -556,12 +707,13 @@ Symbols:
 @fardata . . . . . . . . . . . .	Text   	 FLAT
 @stack . . . . . . . . . . . . .	Text   	 FLAT
 ALT_MASK . . . . . . . . . . . .	Number	 00000003h   
-Blank_message  . . . . . . . . .	Byte	 000002E4 _DATA	
+Answer_message . . . . . . . . .	Byte	 0000030D _DATA	
+Blank_message  . . . . . . . . .	Byte	 000002E9 _DATA	
 CAPSLOCK_ON  . . . . . . . . . .	Number	 00000080h   
 CREATE_ALWAYS  . . . . . . . . .	Number	 00000002h   
 CREATE_NEW . . . . . . . . . . .	Number	 00000001h   
 CTRL_MASK  . . . . . . . . . . .	Number	 0000000Ch   
-Color_message  . . . . . . . . .	Byte	 000002A3 _DATA	
+Color_message  . . . . . . . . .	Byte	 000002A5 _DATA	
 CreateFile . . . . . . . . . . .	Text   	 CreateFileA
 DO_NOT_SHARE . . . . . . . . . .	Number	 00000000h   
 ENABLE_ECHO_INPUT  . . . . . . .	Number	 00000004h   
@@ -572,6 +724,7 @@ ENABLE_PROCESSED_OUTPUT  . . . .	Number	 00000001h
 ENABLE_WINDOW_INPUT  . . . . . .	Number	 00000008h   
 ENABLE_WRAP_AT_EOL_OUTPUT  . . .	Number	 00000002h   
 ENHANCED_KEY . . . . . . . . . .	Number	 00000100h   
+EndGame_message  . . . . . . . .	Byte	 00000364 _DATA	
 FALSE  . . . . . . . . . . . . .	Number	 00000000h   
 FILE_APPEND_DATA . . . . . . . .	Number	 00000004h   
 FILE_ATTRIBUTE_ARCHIVE . . . . .	Number	 00000020h   
@@ -673,9 +826,13 @@ STD_ERROR_HANDLE . . . . . . . .	Number	 -0000000Ch
 STD_INPUT_HANDLE . . . . . . . .	Number	 -0000000Ah   
 STD_OUTPUT_HANDLE  . . . . . . .	Number	 -0000000Bh   
 SetConsoleTitle  . . . . . . . .	Text   	 SetConsoleTitleA
+Start_message  . . . . . . . . .	Byte	 00000330 _DATA	
 TAB  . . . . . . . . . . . . . .	Number	 00000009h   
 TRUE . . . . . . . . . . . . . .	Number	 00000001h   
 TRUNCATE_EXISTING  . . . . . . .	Number	 00000005h   
+Test_message . . . . . . . . . .	Byte	 000002F0 _DATA	
+TimeOut_message  . . . . . . . .	Byte	 00000377 _DATA	
+TryAgain_message . . . . . . . .	Byte	 00000323 _DATA	
 VK_11  . . . . . . . . . . . . .	Number	 000000BDh   
 VK_12  . . . . . . . . . . . . .	Number	 000000BBh   
 VK_ADD . . . . . . . . . . . . .	Number	 0000006Bh   
@@ -755,11 +912,14 @@ VK_SUBTRACT  . . . . . . . . . .	Number	 0000006Dh
 VK_TAB . . . . . . . . . . . . .	Number	 00000009h   
 VK_UP  . . . . . . . . . . . . .	Number	 00000026h   
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
-Welcome_message1 . . . . . . . .	Byte	 00000014 _DATA	
-Welcome_message2 . . . . . . . .	Byte	 000000C8 _DATA	
-Welcome_message3 . . . . . . . .	Byte	 00000191 _DATA	
+Welcome_message1 . . . . . . . .	Byte	 00000016 _DATA	
+Welcome_message2 . . . . . . . .	Byte	 000000CA _DATA	
+Welcome_message3 . . . . . . . .	Byte	 00000193 _DATA	
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
+arr_indicator  . . . . . . . . .	Byte	 00000015 _DATA	
+arrayOut . . . . . . . . . . . .	Byte	 00000000 _BSS	
+arraySetup . . . . . . . . . . .	Byte	 00000008 _BSS	
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
@@ -767,6 +927,7 @@ cyan . . . . . . . . . . . . . .	Number	 00000003h
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
+indicator  . . . . . . . . . . .	Byte	 00000014 _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -775,6 +936,7 @@ lightMagenta . . . . . . . . . .	Number	 0000000Dh
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
 red  . . . . . . . . . . . . . .	Number	 00000004h   
+time . . . . . . . . . . . . . .	DWord	 00000004 _BSS	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 winTitle . . . . . . . . . . . .	Byte	 00000000 _DATA	
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
