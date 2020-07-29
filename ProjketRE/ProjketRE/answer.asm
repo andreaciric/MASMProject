@@ -6,7 +6,7 @@ INCLUDE procedure.inc
 
 .code
 
-    get_answer PROC,
+    true_answer PROC,
                          Arr: PTR BYTE,                ;//pointer to given arraySetup
                          OutArrColors: PTR BYTE,
                          AnswerArr: PTR BYTE
@@ -68,6 +68,41 @@ INCLUDE procedure.inc
 
           popad
           ret
-     get_answer ENDP
+     true_answer ENDP
 
+     get_answer PROC,
+                         Arr: PTR BYTE, ;//pointer to given arraySetup
+                         indicator: PTR BYTE
+     ;//-----------------------------------------------------------------------------
+
+          pushad
+
+          mov esi, 1
+          mov ebx, Arr
+
+     again:
+          mov ecx, [ebx]
+          movzx edx, cl
+          call ReadInt
+          cmp eax, edx
+          JNE end_false
+          mov ecx, indicator
+          mov edi, 1
+          mov [ecx], edi
+          inc ebx
+          inc esi
+          cmp esi, 5
+          JNE again
+          jmp the_end
+
+     end_false:
+          mov ecx, indicator
+          mov edi, 0
+          mov [ecx], edi
+
+     the_end:          
+
+          popad
+          ret
+     get_answer ENDP
 END
